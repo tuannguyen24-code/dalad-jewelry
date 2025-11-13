@@ -1,9 +1,9 @@
-// =================================================================
+/// =================================================================
 // DỮ LIỆU MOCK (Thay thế cho Database)
 // =================================================================
 const initialProducts = [
     { id: 1, name: "Nhẫn Bạc Hoa Tuyết", category: "nhan", price: 550000, stock: 50, images: ['vong4.jpg'] },
-    { id: 2, name: "Dây Chuyền Trái Tim", category: "daychuyen", price: 890000, stock: 35, images: ['vong5.jpg'] },
+    { id: 2, name: "Dây Chuyền Trái Tim", category: "daychuyen", price: 890000, stock: 35, images: ["vong5.jpg"] },
 ];
 
 const initialCategories = [
@@ -12,13 +12,10 @@ const initialCategories = [
     { id: 103, name: "Bông Tai", slug: "bongtai" },
 ];
 
-// Định nghĩa dữ liệu đơn hàng mẫu đồng bộ với cấu trúc mới
 const initialOrders = [
-    { id: 'DH001', customerName: 'Nguyễn Văn A', customerEmail: 'a@example.com', customerPhone: '0901234567', total: 1200000, status: 'Đã giao', date: '2025-10-20', items: [{ name: "Nhẫn Bạc Hoa Tuyết", qty: 2, price: 550000 }], shippingAddress: '789 Đường XYZ', paymentMethod: 'cod', note: '' },
-    { id: 'DH002', customerName: 'Trần Thị B', customerEmail: 'b@example.com', customerPhone: '0987654321', total: 890000, status: 'Đang xử lý', date: '2025-11-05', items: [{ name: "Dây Chuyền Trái Tim", qty: 1, price: 890000 }], shippingAddress: '101 Phố ABC', paymentMethod: 'bank', note: 'Giao sau 5h chiều' },
+    { id: 'DH001', customer: 'Nguyễn Văn A', email: 'a@example.com', phone: '0901234567', total: 1200000, status: 'Đã giao', date: '2025-10-20', items: [{ name: "Nhẫn Bạc Hoa Tuyết", qty: 2, price: 550000 }] },
+    { id: 'DH002', customer: 'Trần Thị B', email: 'b@example.com', phone: '0987654321', total: 890000, status: 'Đang xử lý', date: '2025-11-05', items: [{ name: "Dây Chuyền Trái Tim", qty: 1, price: 890000 }] },
 ];
-
-const SHOP_ORDERS_KEY = 'dalad_orders'; // Key lưu đơn hàng từ trang web
 
 // =================================================================
 // 1. LẤY DỮ LIỆU TỪ LOCAL STORAGE
@@ -36,43 +33,24 @@ let products = getLocalStorageData('adminProducts', initialProducts);
 let categories = getLocalStorageData('adminCategories', initialCategories);
 let orders = getLocalStorageData('adminOrders', initialOrders);
 
-// ✅ LOGIC ĐỒNG BỘ ĐƠN HÀNG MỚI (ĐÃ SỬA ĐỔI)
-const shopOrders = getLocalStorageData(SHOP_ORDERS_KEY, []);
-
+// ✅ Đồng bộ đơn hàng từ trang web (dalad_orders)
+const shopOrders = JSON.parse(localStorage.getItem('dalad_orders') || '[]');
 if (shopOrders.length > 0) {
-    let changed = false;
     shopOrders.forEach(o => {
-        // Chỉ thêm đơn hàng mới nếu chưa tồn tại trong danh sách quản trị
-        if (!orders.some(x => x.id === o.id)) {
-            // Chuyển đổi tên trường để đồng bộ với cấu trúc Admin
-            orders.push({
-                ...o,
-                customer: o.customerName || 'Khách hàng', // Dùng tên trường cũ 'customer' cho tiện
-                email: o.customerEmail, 
-                phone: o.customerPhone
-            });
-            changed = true;
-        }
+        if (!orders.some(x => x.id === o.id)) orders.push(o);
     });
-    if (changed) {
-        saveToLocalStorage('adminOrders', orders);
-    }
+    localStorage.setItem('adminOrders', JSON.stringify(orders));
 }
 
-// Hàm format tiền tệ
-const formatCurrency = (amount) => amount.toLocaleString('vi-VN') + ' VNĐ';
-
 // =================================================================
-// 2. CHUYỂN ĐỔI GIAO DIỆN & KHỞI CHẠY
+// 2. CHUYỂN ĐỔI GIAO DIỆN
 // =================================================================
 const switchSection = (sectionId) => {
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) targetSection.classList.add('active');
+    document.getElementById(sectionId).classList.add('active');
 
     document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-    const navLink = document.querySelector(`.nav-link[data-section="${sectionId}"]`);
-    if (navLink) navLink.classList.add('active');
+    document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
 
     if (sectionId === 'products') renderProductList();
     if (sectionId === 'categories') renderCategoryList();
@@ -85,24 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const sectionId = e.target.getAttribute('data-section');
-            if (sectionId) switchSection(sectionId);
+            switchSection(e.target.getAttribute('data-section'));
         });
     });
     switchSection('dashboard');
 
-    const productForm = document.getElementById('product-form');
-    if(productForm) productForm.addEventListener('submit', handleProductSubmit);
-    
-    const categoryForm = document.getElementById('category-form');
-    if(categoryForm) categoryForm.addEventListener('submit', handleCategorySubmit);
-
-    // Gán sự kiện đóng modal khi click vào nút X
-    window.closeModal = (id) => {
-        const modal = document.getElementById(id);
-        if (modal) modal.style.display = 'none';
-    };
+    document.getElementById('product-form').addEventListener('submit', handleProductSubmit);
+    document.getElementById('category-form').addEventListener('submit', handleCategorySubmit);
 });
+
 // =================================================================
 // 3. QUẢN LÝ SẢN PHẨM
 // =================================================================
@@ -246,41 +215,52 @@ const deleteCategory = (id) => {
 };
 
 // =================================================================
+// HÀM TIỆN ÍCH CHO ĐƠN HÀNG (MỚI)
+// =================================================================
+const formatOrderItems = (items) => {
+    // Mỗi item có cấu trúc { name: string, qty: number, price: number }
+    return items.map(item => {
+        // Có thể thêm size nếu có trong data, hiện tại chỉ dùng tên và số lượng
+        return `• ${item.name} x ${item.qty}`;
+    }).join('<br>'); // Dùng <br> để mỗi sản phẩm hiển thị trên một dòng
+};
+
+// =================================================================
 // 5. QUẢN LÝ ĐƠN HÀNG & KHÁCH HÀNG (ĐÃ SỬA ĐỔI)
 // =================================================================
 const renderOrderList = () => {
     const el = document.getElementById('order-list');
     el.innerHTML = '';
     orders.forEach(o => {
-        let statusClass = o.status.toLowerCase().replace(' ', '-');
-        
-        // SỬ DỤNG TRƯỜNG customerName (đã đồng bộ ở trên)
-        const customerNameDisplay = o.customerName || o.customer || 'Khách Vãng Lai'; 
+        let statusColor = '';
+        // Hàm getStatusClass sẽ là cách tốt hơn, nhưng giữ nguyên style attribute theo code cũ
+        if (o.status === 'Đã giao') statusColor = 'style="color:green;font-weight:bold"';
+        else if (o.status === 'Đang xử lý') statusColor = 'style="color:orange;font-weight:bold"';
+        else if (o.status === 'Đã hủy') statusColor = 'style="color:red;font-weight:bold"';
+
+        const productListHTML = formatOrderItems(o.items); // Lấy danh sách sản phẩm
 
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${o.id}</td>
-            <td onclick="openOrderDetailModal('${o.id}')" style="cursor:pointer; font-weight:500;">${customerNameDisplay}</td>
+            <td>${o.customer}</td>
+            <td>${o.phone || 'N/A'}</td> <td>${productListHTML}</td> <td>${o.total.toLocaleString('vi-VN')} VNĐ</td>
             <td>${o.date}</td>
-            <td>${formatCurrency(o.total)}</td>
-            <td><span class="status ${statusClass}">${o.status}</span></td>
-            <td>
-                <button class="edit-btn" onclick="promptUpdateOrderStatus('${o.id}','${o.status}')">Cập nhật TT</button>
-            </td>
+            <td ${statusColor}>${o.status}</td>
+            <td><button class="edit-btn" onclick="promptUpdateOrderStatus('${o.id}','${o.status}')">Cập nhật TT</button></td>
         `;
         el.appendChild(row);
     });
 };
 
 const promptUpdateOrderStatus = (id, current) => {
-    const newStatus = prompt(`Cập nhật trạng thái cho đơn ${id} (Hiện tại: ${current}). Nhập trạng thái mới (Ví dụ: Chờ duyệt, Đang xử lý, Đã giao, Đã hủy):`);
+    const newStatus = prompt(`Cập nhật trạng thái cho đơn ${id} (Hiện tại: ${current})`);
     if (newStatus) {
         const order = orders.find(o => o.id === id);
         if (order) {
             order.status = newStatus;
             saveToLocalStorage('adminOrders', orders);
             renderOrderList();
-            renderDashboardStats(); // Cập nhật thống kê khi trạng thái thay đổi
         }
     }
 };
@@ -290,31 +270,16 @@ const renderCustomerList = () => {
     el.innerHTML = '';
     const map = new Map();
     orders.forEach(o => {
-        // Sử dụng phone làm key định danh khách hàng
-        const phone = o.customerPhone || o.phone; 
-        if (!phone) return; // Bỏ qua nếu không có số điện thoại
-
-        const name = o.customerName || o.customer;
-        const email = o.customerEmail || o.email;
-
-        if (!map.has(phone)) {
-            map.set(phone, { id: Math.random().toString(36).substring(7).toUpperCase(), name: name, email: email, phone: phone, totalSpent: o.total, orderCount: 1 });
+        if (!map.has(o.phone)) {
+            map.set(o.phone, { id: Math.random().toString(36).substring(7).toUpperCase(), name: o.customer, email: o.email, phone: o.phone, totalSpent: o.total });
         } else {
-            const c = map.get(phone);
+            const c = map.get(o.phone);
             c.totalSpent += o.total;
-            c.orderCount += 1;
         }
     });
     map.forEach(c => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${c.id}</td>
-            <td>${c.name || 'N/A'}</td>
-            <td>${c.email || 'N/A'}</td>
-            <td>${c.phone}</td>
-            <td>${c.orderCount}</td>
-            <td>${formatCurrency(c.totalSpent)}</td>
-        `;
+        row.innerHTML = `<td>${c.id}</td><td>${c.name}</td><td>${c.email}</td><td>${c.phone}</td><td>${c.totalSpent.toLocaleString('vi-VN')} VNĐ</td>`;
         el.appendChild(row);
     });
 };
