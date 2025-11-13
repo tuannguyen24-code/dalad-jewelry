@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DALAD Jewelry - Trang Sức Bạc Cao Cấp</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <a href="#home" class="logo">DALAD </a>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="active">Trang Chủ</a></li>
+                    
+                    
+                    <li class="nav-dropdown-item">
+                        <a href="#products">
+                            Cửa Hàng 
+                            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-mega">
+                            <div class="dropdown-column category-column">
+                                <ul class="category-list">
+                                    <li class="dropdown-title">Danh Mục Sản Phẩm</li>
+                                    <li><a href="#products" onclick="navFilter('nhan', event)">Nhẫn</a></li>
+                                    <li><a href="#products" onclick="navFilter('daychuyen', event)">Dây Chuyền</a></li>
+                                    <li><a href="#products" onclick="navFilter('vongtay', event)">Vòng Tay</a></li>
+                                    <li><a href="#products" onclick="navFilter('lacchan', event)">Lắc Chân</a></li>
+                                    <li class="divider"></li>
+                                    
+                                </ul>
+                            </div>
+                            <div class="dropdown-column price-column">
+                                <ul class="price-list">
+                                    <li class="dropdown-title">Lọc Theo Giá</li>
+                                    <li><a href="#products" onclick="navFilter('price_under5m', event)">Dưới 5 Triệu</a></li>
+                                    <li><a href="#products" onclick="navFilter('price_5m_15m', event)">5 Triệu - 15 Triệu</a></li>
+                                    <li><a href="#products" onclick="navFilter('price_over15m', event)">Trên 15 Triệu</a></li>
+                                </ul>
+                            </div>
+                            <div class="dropdown-column hot-column">
+                                <ul class="dropdown-column">
+                                    <li class="dropdown-title">Sản Phẩm Nổi Bật</li>
+                                    <li><a href="#" onclick="navFilter('hot', event)">Sản Phẩm HOT 🔥</a></li>
+                                    <li><a href="#" onclick="navFilter('new', event)">Hàng Mới Về</a></li>
+                                    <li><a href="#" onclick="navFilter('luxury', event)">Cao Cấp (Luxury)</a></li>
+                                    <li><a href="#" onclick="navFilter('sale', event)">Khuyến Mãi (Sale)</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="#about">Về Chúng Tôi</a></li>
+                    <li><a href="#contact">Liên Hệ</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <button onclick="toggleSearchBar()"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button onclick="toggleCartPopup()"><i class="fa-solid fa-bag-shopping"></i><span class="cart-count" id="cart-count">0</span></button>
+                <button class="user-btn" onclick="openModal('register')"><i class="fa-solid fa-user"></i></button>
+            </div>
+        </div>
+        
+        <div id="search-bar" class="search-bar-hidden">
+            <div class="search-container">
+                <input type="text" id="product-search-input" placeholder="Tìm kiếm sản phẩm...">
+                <button class="search-btn">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section id="home" class="hero-section">
+            <div class="hero-left">
+                <div class="image-wrapper" style="background-image: url('mau1.png');"></div>
+            </div>
+            <div class="hero-center">
+                <p>Khuyến Mãi Lớn</p>
+                <h1 class="sale-title">LÊN TỚI 50%</h1>
+                <p>Trên mọi sản phẩm nhẫn và dây chuyền.</p>
+                <a href="#products" class="primary-btn">Xem Ngay Cửa Hàng <i class="fa-solid fa-arrow-right"></i></a>
+                <div class="image-small-wrapper" style="background-image: url('mau3.png');"></div>
+            </div>
+            <div class="hero-right">
+                <div class="image-wrapper" style="background-image: url('mau2.png');"></div>
+            </div>
+        </section>
+
+        <section class="stat-section">
+            <div class="stat-item">
+                <h2 class="counter" data-target="15">0</h2>
+                <p>Năm Kinh Nghiệm</p>
+            </div>
+            <div class="stat-item">
+                <h2 class="counter" data-target="5000">0</h2>
+                <p>Khách Hàng Hài Lòng</p>
+            </div>
+            <div class="stat-item">
+                <h2 class="counter" data-target="120">0</h2>
+                <p>Bộ Sưu Tập Độc Đáo</p>
+            </div>
+        </section>
+
+        <section id="products" class="product-grid-section">
+            <h2>Sản Phẩm Nổi Bật</h2>
+
+            <div class="product-category-tabs" id="product-tabs">
+                </div>
+
+            <div class="product-grid" id="product-grid">
+                </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2>✨ Về Chúng Tôi - DALAD Silver </h2>
+                <hr>
+                <p class="slogan"> DALAD: Hơn 15 Năm Theo Đuổi Sự Tinh Khiết Của Bạc S925.</p>
+                
+                <div class="about-content">
+                    <p>
+                        Với hành trình hơn 15 năm kinh nghiệm trong ngành chế tác kim hoàn, DALAD tự hào là thương hiệu tiên phong mang đến những thiết kế tinh xảo từ "Bạc S925 cao cấp". Chúng tôi không chỉ bán trang sức; chúng tôi kiến tạo "cảm xúc" và "phong cách" qua từng chiếc nhẫn, dây chuyền, lắc tay và lắc chân.
+                    </p>
+                    
+                    <h3> Thiết Kế và Chất Lượng</h3>
+                    <p>
+                        DALAD chọn Bạc Sterling (S925) làm chất liệu cốt lõi, bởi vì nó sở hữu độ bền bỉ, khả năng chế tác tinh xảo và vẻ sáng bóng lấp lánh không thua kém bất kỳ kim loại quý nào. Mỗi sản phẩm của DALAD đều trải qua quy trình kiểm định chất lượng nghiêm ngặt và được áp dụng công nghệ mạ Rhodium (hoặc vàng trắng) tiên tiến để "chống oxy hóa", đảm bảo độ sáng bóng, bền màu và an toàn tuyệt đối cho da.
+                    </p>
+                    
+                    <div class="facts-list">
+                        <h4>Thành Tựu và Cam Kết</h4>
+                        <ul>
+                            <li><i class="fa-solid fa-medal"></i> - Chất liệu: Cam kết 100% Bạc S925 nhập khẩu, tiêu chuẩn quốc tế.</li>
+                            <li><i class="fa-solid fa-paintbrush"></i> - Bộ Sưu Tập: Hơn 120+ Mẫu Thiết Kế Độc Quyền được cập nhật liên tục.</li>
+                            <li><i class="fa-solid fa-heart"></i> - Uy tín: Phục vụ hơn 5.000+ Khách hàng với sự hài lòng tuyệt đối.</li>
+                        </ul>
+                    </div>
+                    
+                    <p>
+                        Hãy để DALAD đồng hành cùng bạn, giúp bạn tỏa sáng vẻ đẹp đẳng cấp và bền vững mỗi ngày. Khám phá các bộ sưu tập mới nhất của chúng tôi ngay hôm nay!
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="contact-section">
+            <h2>Liên Hệ Với Chúng Tôi</h2>
+            <div class="contact-container">
+                <div class="contact-form">
+                    <h3>Gửi Tin Nhắn</h3>
+                    <form>
+                        <input type="text" placeholder="Họ và Tên" required>
+                        <input type="email" placeholder="Email của bạn" required>
+                        <input type="tel" placeholder="Số điện thoại">
+                        <textarea placeholder="Nội dung tin nhắn" required></textarea>
+                        <button type="submit" class="submit-btn">Gửi Liên Hệ</button>
+                    </form>
+                </div>
+                <div class="contact-info-card">
+                    <h3>Thông Tin Cửa Hàng</h3>
+                    <p><i class="fa-solid fa-location-dot"></i> 123 Nguyễn Chí Thanh, Cầu Giấy, TP. Hà Nội</p>
+                    <p><i class="fa-solid fa-phone"></i> (084) 123 4567</p>
+                    <p><i class="fa-solid fa-envelope"></i> dalad@.com.vn</p>
+                    <p><i class="fa-solid fa-clock"></i> Mở cửa: T2 - T7 (9h00 - 18h00)</p>
+                    <div class="map-placeholder">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.4177763302673!2d105.80334477545696!3d21.015963388217532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab6098b4dc47%3A0x7e3b7f37a0274fba!2zMTIzIMSQLiBOZ3V54buFbiBDaMOtIFRoYW5oLCBMw6FuZyBI4bqhLCDEkOG7kW5nIMSQYSwgSMOgIE7hu5lpIDEwMDAwMCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1762610321262!5m2!1svi!2s" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <a href="#home" class="logo">DALAD <i class="fa-solid fa-gem"></i></a>
+                <p>Mang đến vẻ đẹp sang trọng và đẳng cấp qua từng món trang sức.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Hỗ Trợ Khách Hàng</h4>
+                <ul>
+                   <li><a href="#" onclick="handleFooterLinkClick('chinhsachbaohanh', event)">Chính sách bảo hành</a></li>
+                    <li><a href="#" onclick="handleFooterLinkClick('huongdanmuahang', event)">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#" onclick="handleFooterLinkClick('phuongthucthanhtoan', event)">Phương thức thanh toán</a></li>
+                    <li><a href="#" onclick="handleFooterLinkClick('cauhoithuonggap', event)">Câu hỏi thường gặp</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Về DALAD</h4>
+                <ul>
+                    <li><a href="#" onclick="handleFooterLinkClick('tuyendung', event)">Tuyển dụng</a></li>
+                    <li><a href="#" onclick="handleFooterLinkClick('doitac', event)">Đối tác</a></li>
+                    <li><a href="#" onclick="handleFooterLinkClick('hethongcuahang', event)">Hệ thống cửa hàng</a></li>
+                    <li><a href="#" onclick="handleFooterLinkClick('chungnhan', event)">Chứng nhận</a></li>
+                </ul>
+            </div>
+
+             <div class="footer-newsletter">
+    <h4>ĐĂNG KÝ NHẬN TIN</h4>
+    <p>Nhận ngay thông tin về sản phẩm mới, khuyến mãi, và mã giảm giá độc quyền!</p>
+    <form id="newsletter-form"> 
+        <input type="email" id="newsletter-email" placeholder="Nhập địa chỉ email của bạn" required>
+        <button type="submit" class="subscribe-btn">Đăng Ký</button>
+    </form>
+</div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 DALAD Jewelry. All Rights Reserved.
+        </div>
+        <div id="info-modal" class="modal-overlay hidden" onclick="closeInfoModalOutside(event)">
+        <div class="modal-content info-content">
+            <button class="close-modal-btn" onclick="closeInfoModal()">×</button>
+            <h3 id="info-modal-title"></h3>
+            <div id="info-modal-body" class="modal-body-content">
+                <p>Đây là nội dung mẫu cho mục đã chọn. Để hoàn thiện, bạn cần thay thế nội dung này bằng thông tin chính xác về chính sách, hướng dẫn, hoặc cơ hội tuyển dụng.</p>
+            </div>
+        </div>
+    </div>
+    </footer>
+
+    <div id="auth-modal" class="modal-overlay hidden" onclick="closeModalOutside(event)">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal()">&times;</button>
+            <div class="tabs">
+                <button class="tab-btn active" id="login-tab" onclick="showPanel('login')">Đăng Nhập</button>
+                <button class="tab-btn" id="register-tab" onclick="showPanel('register')">Đăng Ký</button>
+            </div>
+
+            <div id="login-panel" class="form-panel">
+                <h3>Chào mừng </h3>
+                <p>Đăng nhập để xem lịch sử đơn hàng và quản lý tài khoản.</p>
+                <form>
+                    <input type="email" placeholder="Email" required>
+                    <div class="password-group">
+                        <input type="password" placeholder="Mật khẩu" id="login-password" required>
+                        <i class="fa-solid fa-eye-slash" onclick="togglePassword('login-password')"></i>
+                    </div>
+                    <a href="#" style="display: block; text-align: right; margin-bottom: 20px; font-size: 0.9rem;">Quên mật khẩu?</a>
+                    <button type="submit" class="register-btn">Đăng Nhập</button>
+                </form>
+                <div class="divider">HOẶC</div>
+                <div class="social-login">
+    <a href="https://accounts.google.com/signin" target="_blank" class="google-btn">
+        <i class="fab fa-google"></i> Google
+    </a> 
+    
+    <a href="https://www.facebook.com/login/" target="_blank" class="facebook-btn">
+        <i class="fab fa-facebook-f"></i> Facebook
+    </a>
+</div>
+            </div>
+
+            <div id="register-panel" class="form-panel hidden">
+                <h3>Tạo tài khoản mới</h3>
+                <p>Đăng ký ngay.</p>
+                <form>
+                    <input type="text" placeholder="Họ và Tên" required>
+                    <input type="email" placeholder="Email" required>
+                    <div class="password-group">
+                        <input type="password" placeholder="Mật khẩu" id="register-password" required>
+                        <i class="fa-solid fa-eye-slash" onclick="togglePassword('register-password')"></i>
+                    </div>
+                    <label class="terms-checkbox">
+                        <input type="checkbox" required> Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a>
+                    </label>
+                    <button type="submit" class="register-btn">Đăng Ký Tài Khoản</button>
+                </form>
+                <div class="divider">HOẶC</div>
+                <div class="social-login">
+    <a href="https://accounts.google.com/signin" target="_blank" class="google-btn">
+        <i class="fab fa-google"></i> Google
+    </a> 
+    
+    <a href="https://www.facebook.com/login/" target="_blank" class="facebook-btn">
+        <i class="fab fa-facebook-f"></i> Facebook
+    </a>
+</div>
+            </div>
+        </div>
+    </div>
+<div id="checkout-modal" class="modal-overlay hidden" onclick="closeCheckoutModalOutside(event)">
+        <div class="modal-content checkout-content">
+            <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+            
+            <h2>🛒 Thanh Toán Đơn Hàng</h2>
+            
+            <div class="checkout-container">
+                
+                <div class="shipping-info">
+    <h3>Thông Tin Khách Hàng</h3>
+     <form id="checkout-form">
+        <label for="checkout-name">Họ và tên:</label>
+        <input type="text" id="checkout-name" required>
+
+        <label for="checkout-email">Email:</label>
+        <input type="email" id="checkout-email" placeholder="example@gmail.com" required>
+
+        <label for="checkout-phone">Số điện thoại:</label>
+        <input type="tel" id="checkout-phone" required>
+
+        <label for="checkout-address">Địa chỉ:</label>
+        <input type="text" id="checkout-address" required>
+
+        <p>Phương thức thanh toán:</p>
+        <label><input type="radio" name="payment" value="cod" checked> Thanh toán khi nhận hàng</label><br>
+        <label><input type="radio" name="payment" value="bank"> Chuyển khoản</label>
+
+        <div style="margin-top:15px;">
+          <button type="submit" id="submit-order-btn">Hoàn tất đặt hàng</button>
+          <button type="button" onclick="closeCheckoutModal()">Hủy</button>
+        </div>
+      </form>
+</div>
+                <div class="order-summary">
+                    <h3>Tóm Tắt Đơn Hàng</h3>
+                    <div id="checkout-summary-list" class="summary-items-list">
+                        <p class="empty-summary-text">Vui lòng đợi...</p> 
+                    </div>
+                    <div class="summary-totals">
+                        <div class="summary-line">
+                            <p>Tạm tính:</p> <span id="summary-subtotal">0 VNĐ</span>
+                        </div>
+                        <div class="summary-line">
+                            <p>Phí vận chuyển:</p> <span>Miễn phí</span>
+                        </div>
+                        <hr>
+                        <div class="summary-line total-line">
+                            <p>Tổng cộng:</p> <span id="summary-total">0 VNĐ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="cart-popup" class="cart-popup-overlay" onclick="closeCartPopupOutside(event)">
+        <div class="cart-popup-content">
+            <div class="cart-header">
+                <h3>Giỏ Hàng Của Bạn (<span id="cart-count-header">0</span>)</h3>
+                <button class="close-cart-btn" onclick="toggleCartPopup()">&times;</button>
+            </div>
+            
+            <div class="cart-items" id="cart-items-container">
+                </div>
+
+            <div class="cart-summary">
+                <p>Tổng phụ: <span id="cart-subtotal">0 VNĐ</span></p>
+                <p>Phí vận chuyển: <span>Miễn phí</span></p>
+                <p class="total">Tổng cộng: <span id="cart-total">0 VNĐ</span></p>
+                <button class="primary-btn checkout-btn" onclick="openCheckoutModal()">Tiến Hành Thanh Toán</button>
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+    <script>
+    const products = [
+        // --- NHẪN (6 sản phẩm) ---
+        { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 12500000, desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', image: '1.jpg', tag: 'Hot', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p5', name: 'Nhẫn Eternity Đính Đá CZ', category: 'nhan', price: 4500000, desc: 'Thanh mảnh, vĩnh cửu, đeo xếp lớp.', image: '2.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p8', name: 'Nhẫn Nơ Xinh Đá Rơi', category: 'nhan', price: 25000000, desc: 'Nơ độc đáo, chuyển động, rất nữ tính.', image: '3.jpg', tag: 'VIP', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p11', name: 'Nhẫn Nơ Đá Mini Dịu Dàng', category: 'nhan', price: 9900000, desc: 'Nhỏ gọn, duyên dáng, phong cách trẻ trung.', image: '4.jpg', tag: 'Sale', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p13', name: 'Nhẫn Nơ Hồng Thạch Anh', category: 'nhan', price: 35000000, desc: 'Đá hồng trái tim, ngọt ngào, thu hút ánh nhìn.', image: '5.jpg', tag: 'Luxury', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p14', name: 'Nhẫn Cặp Kim Cương Trái Tim', category: 'nhan', price: 6200000, desc: 'Tình yêu vĩnh cửu.', image: '6.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        
+        // --- DÂY CHUYỀN (6 sản phẩm) ---
+        { id: 'p2', name: 'Dây Chuyền Bạc Thanh Lịch', category: 'daychuyen', price: 8900000, desc: 'Bạc S925, chuỗi hạt đá thả rơi, lấp lánh nhẹ nhàng.', image: 'vong1.jpg', tag: 'new', sizes: ['35cm', '40cm', '50cm']},
+        { id: 'p6', name: 'Dây Chuyền Bạc Nút Thắt Kim Cương', category: 'daychuyen', price: 1500000, desc: 'Bạc S925, nút thắt đá đôi, sang trọng, thanh lịch.', image: 'vong2.jpg', tag: '', sizes: ['35cm', '40cm', '50cm'] },
+        { id: 'p9', name: 'Dây Chuyền Bạc Đá Vượt Thời Gian', category: 'daychuyen', price: 6800000, desc: 'Bạc S925, chuỗi đá khối, vẻ đẹp vĩnh cửu, cổ điển.', image: 'voneg3.jpg', tag: '', sizes: ['35cm', '40cm', '50cm'] },
+        { id: 'p15', name: 'Dây Chuyền Bạc Giọt Nước Xếp Tầng', category: 'daychuyen', price: 3100000, desc: 'Bạc S925, giọt nước xếp tầng, thanh thoát, tinh xảo.', image: 'vong4.jpg', tag: 'Hot', sizes: ['35cm', '40cm', '50cm'] },
+        { id: 'p16', name: 'Dây Chuyền Bạc Hoa Tuyết Độc Đáo', category: 'daychuyen', price: 16000000, desc: 'Bạc S925, hoa tuyết lồng, tuyên ngôn phong cách cá nhân.', image: 'vong5.jpg', tag: 'VIP', sizes: ['35cm', '40cm', '50cm'] },
+        { id: 'p17', name: 'Dây Chuyền Bạc Mắt Xích Tinh Tế', category: 'daychuyen', price: 950000, desc: 'Bạc S925, dây mảnh, mắt xích hiện đại, tối giản.', image: 'vong6.jpg', tag: 'Sale', sizes: ['35cm', '40cm', '50cm'] },
+
+        // --- LẮC TAY (6 sản phẩm) ---
+        { id: 'p3', name: 'Vòng Tay Bạc Tình Yêu Charm', category: 'vongtay', price: 2100000, desc: 'Vòng hạt/bi, mặt charm hình trái tim đính đá nhỏ, có móc nối.', image: 'nhan1.jpg', tag: 'Sale', sizes: ['15cm', '16cm', '17cm', '18cm'] },
+        { id: 'p7', name: 'Vòng Tay Bạc Đá Khối Hình Học', category: 'vongtay', price: 18000000, desc: 'Vòng tay rút (bolo bracelet), dây chuỗi hộp, mặt đính 5 khối đá hình học (giọt nước, vuông, trái tim).', image: 'nhan2.jpg', tag: 'Hot', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p12', name: 'Vòng Tay Bạc Tim Charm Rỗng ', category: 'vongtay', price: 3200000, desc: 'Vòng tay dạng rắn (snake chain), mặt charm trái tim rỗng đính đá, có chốt khóa.', image: 'nhan3.jpg', tag: 'luxury', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p18', name: 'Vòng Tay Bạc Khóa Tim Duyên Dáng', category: 'vongtay', price: 22000000, desc: 'Vòng tay dạng rắn (snake chain), mặt khóa trái tim đơn giản đính đá nhỏ.', image: 'nhan4.jpg', tag: 'Luxury', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p19', name: 'Vòng Tay Bạc Dây Xoắn Kitty', category: 'vongtay', price: 4800000, desc: 'Vòng tay dây xoắn kép (twisted cable), mặt charm hình đầu mèo Hello Kitty (hoặc tương tự) đơn giản.', image: 'nhan5.jpg', tag: '', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p20', name: 'Vòng Tay Bạc Tim Khảm Đính Đá', category: 'vongtay', price: 1500000, desc: 'Vòng tay dạng rắn (snake chain), mặt khóa trái tim đính đá và khảm màu trắng (men/sứ).', image: 'nhan6.jpg', tag: 'new', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        
+        // --- LẮC CHÂN (6 sản phẩm) ---
+        { id: 'p4', name: 'Lắc Chân Bạc Chuỗi Biển', category: 'lacchan', price: 950000, desc: 'Bạc S925. Sáng lấp lánh, duyên dáng bước chân.', image: 'chan1.jpg', tag: 'Hot', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p10', name: 'Lắc Chân Bạc Cỏ May Mắn Vĩnh Cửu', category: 'lacchan', price: 750000, desc: 'Bạc S925. Cỏ bốn lá, may mắn đồng hành.', image: 'chan2.jpg', tag: '', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p21', name: 'Lắc Chân Bạc Điệu Valse Trái Tim', category: 'lacchan', price: 3900000, desc: 'Bạc S925. Tim đá vát cạnh, chuyển động quyến rũ.', image: 'chan3.jpg', tag: 'VIP', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p22', name: 'Lắc Chân Bạc Dạ Nguyệt Tương Phản', category: 'lacchan', price: 550000, desc: 'Bạc S925. Đá đen trắng, phong cách hiện đại.', image: 'chan4.jpg', tag: 'Sale', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p23', name: 'Lắc Chân Bạc Nụ Hạt Nắng Sớm', category: 'lacchan', price: 1200000, desc: 'Bạc S925. Hạt mạ vàng, rạng rỡ, bắt mắt.', image: 'chan5.jpg', tag: '', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p24', name: 'Lắc Chân Bạc Thiên Nhiên Thu Nhỏ', category: 'lacchan', price: 2800000, desc: 'Bạc S925. Charm sóng nước, nhẹ nhàng, nữ tính.', image: 'chan6.jpg', tag: 'new', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+    ];
+
+    let cart = []; 
+    let selectedSizes = {}; 
+    
+    // Khai báo biến DOM
+    const checkoutModal = document.getElementById('checkout-modal');
+    const checkoutSummaryList = document.getElementById('checkout-summary-list');
+    const summarySubtotal = document.getElementById('summary-subtotal');
+    const summaryTotal = document.getElementById('summary-total');
+    
+    const cartPopup = document.getElementById('cart-popup');
+    const cartCountElements = document.querySelectorAll('#cart-count, #cart-count-header');
+    const cartItemsContainer = document.getElementById('cart-items-container'); 
+    const cartSubtotalElement = document.getElementById('cart-subtotal');
+    const cartTotalElement = document.getElementById('cart-total');
+
+    const authModal = document.getElementById('auth-modal');
+    const loginPanel = document.getElementById('login-panel');
+    const registerPanel = document.getElementById('register-panel');
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
+    const searchBar = document.getElementById('search-bar');
+    const counters = document.querySelectorAll('.counter');
+    const statSection = document.querySelector('.stat-section');
+
+
+    const formatCurrency = (amount) => {
+         return amount.toLocaleString('vi-VN') + ' VNĐ'; 
+    };
+    
+    const getPriceRange = (price) => {
+        if (price < 5000000) return 'under5m'; 
+        if (price >= 5000000 && price <= 15000000) return '5m_15m';
+        return 'over15m'; 
+    };
+
+    const showToast = (message, type = 'success') => {
+        const toast = document.getElementById('success-toast');
+        const toastMessage = document.getElementById('toast-message');
+        
+        if (!toast || !toastMessage) return;
+
+        toast.className = 'success-toast hidden';
+        toast.classList.add(`toast-${type}`);
+        toastMessage.textContent = message;
+
+        toast.classList.remove('hidden');
+        
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3000);
+    };
+
+    // Hàm mở Cart Popup
+    const openCartPopup = () => {
+        if (cartPopup) {
+            cartPopup.style.display = 'flex';
+        }
+    };
+
+    // Hàm đóng Cart Popup 
+    const closeCartPopup = () => {
+        if (cartPopup) {
+            cartPopup.style.display = 'none';
+        }
+    };
+    
+    // Hàm đóng/mở Giỏ hàng
+    const toggleCartPopup = () => {
+        if (cartPopup) {
+            cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
+        }
+    };
+    
+    const closeCartPopupOutside = (event) => {
+        if (event.target === cartPopup) {
+            closeCartPopup();
+        }
+    };
+    
+    // 3. LOGIC GIỎ HÀNG (CART LOGIC)
+ 
+
+    const removeFromCart = (productId, size) => {
+        const itemIndex = cart.findIndex(item => item.id === productId && (item.size || '') === (size || ''));
+
+        if (itemIndex > -1) {
+            cart.splice(itemIndex, 1);
+            updateCartDisplay();
+            showToast('Đã xóa sản phẩm khỏi giỏ hàng.', 'warning');
+        }
+    };
+
+    const changeQuantity = (productId, size, delta) => {
+        const item = cart.find(i => i.id === productId && (i.size || '') === (size || '')); 
+
+        if (item) {
+            item.quantity += delta;
+
+            if (item.quantity <= 0) {
+                removeFromCart(productId, size); 
+            } else {
+                updateCartDisplay();
+            }
+        }
+    };
+
+    // Hàm Cập nhật hiển thị giỏ hàng
+    const updateCartDisplay = () => {
+        if (!cartItemsContainer || !cartCountElements.length) return;
+
+        let totalAmount = 0;
+        let totalItems = 0;
+
+        cartItemsContainer.innerHTML = ''; 
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<p style="text-align: center; color: var(--light-text-color); padding: 20px;">Giỏ hàng trống.</p>';
+            cartCountElements.forEach(el => el.textContent = '0');
+            if (cartSubtotalElement) cartSubtotalElement.textContent = formatCurrency(0);
+            if (cartTotalElement) cartTotalElement.textContent = formatCurrency(0);
+            return;
+        }
+
+        cart.forEach(item => {
+            totalAmount += item.price * item.quantity;
+            totalItems += item.quantity;
+            
+            const currentSize = item.size || ''; 
+            const sizeInfo = currentSize ? `<span class="cart-item-size">(Size: ${currentSize})</span>` : '';
+            const itemTotal = item.price * item.quantity;
+            
+            const listItem = document.createElement('div');
+            listItem.className = 'cart-item';
+            
+            listItem.innerHTML = `
+                <div class="cart-item-image" style="background-image: url('${item.image}')"></div>
+                <div class="cart-item-details">
+                    <p class="cart-item-name">${item.name} ${sizeInfo}</p>
+                    <p class="cart-item-price-unit">${formatCurrency(item.price)}</p>
+                    <div class="cart-item-controls">
+                        <button onclick="changeQuantity('${item.id}', '${currentSize}', -1)">-</button>
+                        <input type="number" min="1" value="${item.quantity}" readonly>
+                        <button onclick="changeQuantity('${item.id}', '${currentSize}', 1)">+</button>
+                    </div>
+                </div>
+                <p class="cart-item-subtotal">${formatCurrency(itemTotal)}</p>
+                <button class="remove-item-btn" onclick="removeFromCart('${item.id}', '${currentSize}')">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            `;
+            cartItemsContainer.appendChild(listItem);
+        });
+        
+        cartCountElements.forEach(el => el.textContent = totalItems);
+        if (cartSubtotalElement) cartSubtotalElement.textContent = formatCurrency(totalAmount);
+        if (cartTotalElement) cartTotalElement.textContent = formatCurrency(totalAmount); 
+    };
+
+    // Hàm xử lý chọn size
+    const selectSize = (selectedButton, productId) => {
+        const container = document.getElementById(`swatch-container-${productId}`);
+        const size = selectedButton.getAttribute('data-size');
+
+        if (!container) return; 
+
+        container.querySelectorAll('.size-swatch').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        selectedButton.classList.add('active');
+        selectedSizes[productId] = size;
+    };
+    
+    // Hàm thêm sản phẩm vào giỏ hàng
+    const addToCart = (productId) => {
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        let selectedSize = selectedSizes[productId];
+
+        if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+            showToast('Vui lòng chọn size sản phẩm.', 'error');
+            return;
+        }
+        
+        const existingItem = cart.find(item => item.id === productId && item.size === selectedSize);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                ...product, 
+                size: selectedSize, 
+                quantity: 1
+            });
+        }
+
+        updateCartDisplay();
+        showToast(`Đã thêm ${product.name} (Size: ${selectedSize || 'Mặc định'}) vào giỏ hàng!`);
+        openCartPopup(); 
+    };
+    // =================================================================
+// LOGIC ĐẶT HÀNG & THANH TOÁN
+// =================================================================
+const ORDERS_KEY = 'dalad_orders';
+
+// Hàm lấy dữ liệu từ LocalStorage (Lặp lại logic từ admin.js)
+const getOrders = () => {
+    const ordersJson = localStorage.getItem(ORDERS_KEY);
+    return ordersJson ? JSON.parse(ordersJson) : [];
+};
+
+// Hàm lưu dữ liệu vào LocalStorage
+const saveOrders = (orders) => {
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+};
+
+// Hàm tạo ID đơn hàng mới
+const generateOrderId = (orders) => {
+    const lastId = orders.length > 0 ? orders[orders.length - 1].id : 'DH000';
+    const num = parseInt(lastId.substring(2)) + 1;
+    return 'DH' + String(num).padStart(3, '0');
+};
+
+
+   
+    // 4. LOGIC THANH TOÁN 
+   
+    const renderCheckoutSummary = () => {
+        if (!checkoutSummaryList || !summarySubtotal || !summaryTotal) return;
+        
+        checkoutSummaryList.innerHTML = '';
+        let subTotal = 0;
+
+        cart.forEach(item => {
+            const itemPrice = item.price * item.quantity;
+            subTotal += itemPrice;
+            
+            const sizeInfo = item.size ? `(${item.size})` : '';
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'summary-item';
+            itemDiv.innerHTML = `
+                <span class="summary-item-name">${item.name} ${sizeInfo} x ${item.quantity}</span>
+                <span>${formatCurrency(itemPrice)}</span>
+            `;
+            checkoutSummaryList.appendChild(itemDiv);
+        });
+
+        summarySubtotal.textContent = formatCurrency(subTotal);
+        summaryTotal.textContent = formatCurrency(subTotal);
+    };
+
+    // Hàm đóng Modal Thanh toán
+    const closeCheckoutModal = () => {
+        if (checkoutModal) checkoutModal.classList.add('hidden');
+    };
+
+    /*
+      Mở Modal Thanh toán
+     */
+    const openCheckoutModal = () => {
+        if (!checkoutModal) return console.error("Lỗi: Không tìm thấy phần tử HTML 'checkout-modal'.");
+
+        if (cart.length === 0) {
+            showToast('Giỏ hàng trống. Vui lòng thêm sản phẩm.', 'error');
+            return;
+        }
+        
+        // 1. Đóng giỏ hàng nhỏ (
+        closeCartPopup(); 
+        
+        // 2. Render tóm tắt đơn hàng
+        renderCheckoutSummary();
+        
+        // 3. Hiển thị modal
+        checkoutModal.classList.remove('hidden');
+    };
+
+    // Đóng Modal khi bấm ra ngoài
+    const closeCheckoutModalOutside = (event) => {
+        if (event.target === checkoutModal) {
+            closeCheckoutModal();
+        }
+    };
+    
+ // Hàm Xử lý Đặt hàng (ĐÃ CHỈNH SỬA)
+    const ADMIN_API_ENDPOINT = './api_admin.php'; // Giữ nguyên
+    const submitOrder = (event) => {
+        event.preventDefault(); 
+        
+        const form = document.getElementById('checkout-form');
+        // Lấy phần tử tổng tiền (Giả sử có ID là 'summary-total' trong phần Tóm tắt)
+        const summaryTotalEl = document.getElementById('summary-total'); 
+        
+        // Kiểm tra tính hợp lệ cơ bản
+        if (!form || !summaryTotalEl) {
+             (window.showToast || console.error)("Lỗi: Không tìm thấy form hoặc tổng tiền để tính toán.", 'error'); 
+             return;
+        }
+        
+        if (!form.checkValidity()) {
+            form.reportValidity(); 
+            return;
+        }
+
+        // 1. Lấy dữ liệu từ form
+        const name = document.getElementById('checkout-name').value.trim();
+        const phone = document.getElementById('checkout-phone').value.trim();
+        const address = document.getElementById('checkout-address').value.trim();
+        const email = document.getElementById('checkout-email').value.trim();
+        const paymentMethodEl = document.querySelector('input[name="payment"]:checked');
+        const paymentMethod = paymentMethodEl ? paymentMethodEl.value : null;
+        const note = document.getElementById('checkout-note')?.value.trim() || ''; // Lấy ghi chú nếu có
+
+        // Lỗi kiểm tra cần thiết
+        if (!paymentMethod || cart.length === 0) {
+             (window.showToast || alert)("Vui lòng chọn phương thức thanh toán và đảm bảo giỏ hàng không trống.", 'error'); 
+             return;
+        }
+
+        // Parse tổng tiền từ DOM (chuyển '12.000 VNĐ' -> 12000)
+        const totalAmount = parseInt(summaryTotalEl.textContent.replace(/\D/g, "")) || 0;
+
+        // Giả lập xử lý đơn hàng thành công 
+        console.log("--- ĐƠN HÀNG MỚI ---");
+        console.log(`Khách hàng: ${name} (SĐT: ${phone})`);
+        console.log(`Địa chỉ: ${address}`);
+        console.log(`Phương thức: ${paymentMethod}`);
+        console.log(`Tổng tiền: ${summaryTotalEl.textContent}`); 
+        console.log("Chi tiết sản phẩm:", cart);
+        
+        // 2. Lưu đơn hàng vào localStorage để hiển thị trong Admin
+        const orders = getOrders();
+        const newOrderId = generateOrderId(orders);
+        
+        // Tạo đối tượng đơn hàng với đầy đủ trường thông tin
+        const newOrder = {
+            id: newOrderId,
+            customerName: name, // Đã đổi tên trường để rõ ràng hơn
+            customerEmail: email,
+            customerPhone: phone,
+            shippingAddress: address, // Bổ sung địa chỉ
+            paymentMethod: paymentMethod, // Bổ sung phương thức thanh toán
+            note: note, // Bổ sung ghi chú
+            total: totalAmount, // Sử dụng giá trị số đã parse
+            status: "Đang xử lý", // Đặt trạng thái ban đầu là "Chờ duyệt"
+            date: new Date().toLocaleDateString('vi-VN'), // Dùng format ngày dễ đọc
+            items: cart.map(item => ({
+                name: item.name,
+                qty: item.quantity,
+                price: item.price,
+                size: item.size || null // Bao gồm size nếu có
+            }))
+        };
+
+        orders.push(newOrder);
+        saveOrders(orders);
+        console.log("✅ Đã lưu đơn hàng vào localStorage:", newOrder);
+
+        
+        // 3. Xóa giỏ hàng và reset
+        cart = [];
+        // selectedSizes = {}; // Giữ nguyên hoặc bỏ qua nếu không dùng
+        updateCartDisplay();
+        
+        // 4. HIỂN THỊ THÔNG BÁO THÀNH CÔNG
+        
+        closeCheckoutModal(); // Đóng Modal Thanh toán
+
+        (window.showToast || alert)(
+            `🎉 Bạn đã đặt hàng thành công! 🎉\n\n` +
+            `Mã đơn hàng: ${newOrderId}\n` +
+            `Tổng tiền: ${summaryTotalEl.textContent}\n` +
+            `Cảm ơn bạn đã mua sắm.` , 
+            'success'
+        );
+        
+        // Reset form
+        form.reset();
+        
+    };
+
+   
+    // 5. LOGIC HIỂN THỊ VÀ LỌC SẢN PHẨM
+  
+    const renderProducts = (filteredProducts) => {
+        const container = document.getElementById('product-grid');
+        if (!container) return;
+        container.innerHTML = ''; 
+
+        if (filteredProducts.length === 0) {
+             container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: var(--light-text-color); margin: 50px 0;">Xin lỗi, không tìm thấy sản phẩm nào phù hợp với tiêu chí lọc của bạn.</p>';
+             return;
+        }
+
+        filteredProducts.forEach(product => {
+            const card = document.createElement('div');
+            card.className = `product-card product-category-${product.category} product-price-${getPriceRange(product.price)}`;
+            
+            const tagHtml = product.tag ? `<span class="badge">${product.tag}</span>` : '';
+            
+            let sizeSelectHtml = '';
+            if (product.sizes && product.sizes.length > 0) {
+                const sizeButtons = product.sizes.map(size => 
+                    `<button 
+                        class="size-swatch" 
+                        data-size="${size}" 
+                        onclick="selectSize(this, '${product.id}')"
+                    >
+                        ${size}
+                    </button>`
+                ).join('');
+
+                sizeSelectHtml = `
+                    <div class="size-selector">
+                        <p class="size-label">Chọn Size:</p>
+                        <div class="size-swatch-container" id="swatch-container-${product.id}">
+                            ${sizeButtons}
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                ${tagHtml}
+                <div class="product-image" style="background-image: url('${product.image}');"></div>
+                <p class="product-name">${product.name}</p>
+                <p class="product-desc">${product.desc}</p>
+                ${sizeSelectHtml} <p class="product-price">${formatCurrency(product.price)}</p>
+                <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                </button>
+            `;
+            container.appendChild(card);
+        });
+    };
+
+    const renderTabs = () => {
+        const tabsContainer = document.getElementById('product-tabs');
+        if (!tabsContainer) return;
+        const categories = [
+            { id: 'all', name: 'Tất Cả' },
+            { id: 'nhan', name: 'Nhẫn' },
+            { id: 'daychuyen', name: 'Dây Chuyền' },
+            { id: 'vongtay', name: 'Vòng Tay' },
+            { id: 'lacchan', name: 'Lắc Chân' }
+        ];
+
+        categories.forEach((cat, index) => {
+            const button = document.createElement('button');
+            button.className = `tab ${index === 0 ? 'active' : ''}`;
+            button.textContent = cat.name;
+            button.setAttribute('data-category', cat.id);
+            button.onclick = () => filterProducts(cat.id, button);
+            tabsContainer.appendChild(button);
+        });
+    };
+
+    const filterProducts = (filterValue, activeTab = null) => {
+        const isPriceFilter = filterValue.startsWith('price_');
+        const tagFilters = ['hot', 'new', 'luxury', 'sale'];
+        const isTagFilter = tagFilters.includes(filterValue); 
+        const priceRange = filterValue.replace('price_', '');
+        
+        const filteredProducts = products.filter(product => {
+            if (filterValue === 'all') return true;
+            if (isPriceFilter) {
+                return getPriceRange(product.price) === priceRange;
+            } 
+            else if (isTagFilter) {
+                return product.tag && product.tag.toLowerCase() === filterValue; 
+            }
+            else {
+                return product.category === filterValue;
+            }
+        });
+
+        renderProducts(filteredProducts);
+
+        document.querySelectorAll('#product-tabs .tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        if (activeTab) {
+            activeTab.classList.add('active');
+        } else if (filterValue === 'all' || !isPriceFilter) {
+            const category = isPriceFilter ? 'all' : filterValue;
+            const tabToActivate = document.querySelector(`#product-tabs .tab[data-category="${category}"]`);
+            if (tabToActivate) {
+                tabToActivate.classList.add('active');
+            }
+        }
+        
+        const targetSection = document.getElementById('products');
+        if (targetSection) {
+            const headerHeight = document.querySelector('.main-header')?.offsetHeight || 0;
+            window.scrollTo({
+                top: targetSection.offsetTop - headerHeight - 10,
+                behavior: 'smooth'
+            });
+        }
+        
+        document.querySelectorAll('.main-nav a').forEach(a => {
+            a.classList.remove('active');
+        });
+        document.querySelector('.main-nav a[href="#home"]')?.classList.add('active');
+    };
+
+    const navFilter = (filterValue, event) => {
+        event.preventDefault(); 
+        filterProducts(filterValue, null); 
+    }
+    
+    
+    // 6. CÁC LOGIC KHÁC
+    // Biến DOM cho Info Modal
+    const infoModal = document.getElementById('info-modal');
+    const infoModalTitle = document.getElementById('info-modal-title');
+    const infoModalBody = document.getElementById('info-modal-body');
+
+    // Hàm mở Info Modal với nội dung
+    const openInfoModal = (title, contentHTML) => {
+        if (!infoModal || !infoModalTitle || !infoModalBody) return;
+        
+        infoModalTitle.textContent = title;
+        infoModalBody.innerHTML = contentHTML;
+        infoModal.classList.remove('hidden');
+    };
+
+    // Hàm đóng Info Modal
+    const closeInfoModal = () => {
+        if (infoModal) infoModal.classList.add('hidden');
+    };
+
+    // Đóng Modal khi bấm ra ngoài
+    const closeInfoModalOutside = (event) => {
+        if (event.target === infoModal) {
+            closeInfoModal();
+        }
+    };
+
+    // Hàm chứa nội dung cụ thể cho từng liên kết footer
+    const handleFooterLinkClick = (key, event) => {
+        event.preventDefault(); // Ngăn chặn chuyển trang
+
+        let title = "";
+        let content = "";
+        
+        // --- NỘI DUNG TỪNG MỤC ---
+        switch (key) {
+            case 'chinhsachbaohanh':
+                title = "Chính Sách Bảo Hành Chính Thức";
+                content = `
+                    <p><strong>1. Thời gian bảo hành:</strong> 12 tháng kể từ ngày mua cho lỗi kỹ thuật sản xuất.</p>
+                    <p><strong>2. Phạm vi:</strong> Bảo hành trọn đời dịch vụ làm sáng, đánh bóng miễn phí.</p>
+                    <p><strong>3. Từ chối bảo hành:</strong> Trang sức bị gãy, biến dạng, trầy xước nặng do va đập, hoặc bị tác động bởi hóa chất.</p>
+                `;
+                break;
+            case 'huongdanmuahang':
+                title = "Hướng Dẫn Mua Hàng Online Nhanh Chóng";
+                content = `
+                    <ol>
+                        <li>Chọn sản phẩm, bấm vào size và click "Thêm vào giỏ".</li>
+                        <li>Bấm vào biểu tượng túi hàng (<i class="fa-solid fa-bag-shopping"></i>) ở góc trên bên phải.</li>
+                        <li>Kiểm tra đơn hàng và bấm "Tiến Hành Thanh Toán".</li>
+                        <li>Điền thông tin giao hàng và chọn phương thức thanh toán.</li>
+                        <li>Bấm "HOÀN TẤT ĐẶT HÀNG".</li>
+                    </ol>
+                `;
+                break;
+            case 'phuongthucthanhtoan':
+                title = "Phương Thức Thanh Toán";
+                content = `
+                    <p>DALAD chấp nhận các phương thức sau:</p>
+                    <ul>
+                        <li><i class="fa-solid fa-truck-fast"></i> Thanh toán khi nhận hàng (COD): Áp dụng toàn quốc.</li>
+                        <li><i class="fa-solid fa-building-columns"></i> Chuyển khoản ngân hàng: Thông tin tài khoản sẽ được cung cấp khi bạn chọn phương thức này ở bước thanh toán.</li>
+                        <li><i class="fa-solid fa-credit-card"></i> Thanh toán qua ví điện tử/thẻ tín dụng: Sắp ra mắt.</li>
+                    </ul>
+                `;
+                break;
+            case 'cauhoithuonggap':
+                title = "Câu Hỏi Thường Gặp (FAQ)";
+                content = `
+                    <p><strong>Q: Bạc S925 có bị đen không?</strong></p>
+                    <p>A: Có. Bạc S925 vẫn có thể bị oxy hóa theo thời gian. Tuy nhiên, sản phẩm DALAD được mạ Rhodium giúp hạn chế tối đa quá trình này. Dịch vụ làm sáng trọn đời là miễn phí.</p>
+                    <p><strong>Q: Tôi có thể đổi size không?</strong></p>
+                    <p>A: Có. Vui lòng liên hệ hotline (084) 123 4567 trong vòng 7 ngày kể từ ngày nhận hàng để được hỗ trợ.</p>
+                `;
+                break;
+            case 'tuyendung':
+                title = "Tuyển Dụng Cùng DALAD";
+                content = `
+                    <p>Chúng tôi luôn tìm kiếm các vị trí:</p>
+                    <ul>
+                        <li>Chuyên viên thiết kế trang sức (Yêu cầu 2+ năm kinh nghiệm)</li>
+                        <li>Nhân viên bán hàng tại cửa hàng (Full-time/Part-time)</li>
+                        <li>Chuyên viên Marketing Digital</li>
+                    </ul>
+                    <p>Vui lòng gửi CV về email: <a href="mailto:dalad@.com.vn">dalad@.com.vn</a></p>
+                `;
+                break;
+            case 'doitac':
+                title = "Cơ Hội Hợp Tác & Đối Tác";
+                content = `
+                    <p>DALAD chào đón hợp tác với các đối tác truyền thông, đại lý phân phối và cửa hàng quà tặng.</p>
+                    <p>Vui lòng liên hệ phòng Đối tác qua email: <a href="mailto:dalad@.com.vn">dalad@.com.vn</a></p>
+                `;
+                break;
+            case 'hethongcuahang':
+                title = "Hệ Thống Cửa Hàng";
+                content = `
+                    <p><strong>Showroom Chính:</strong> 123 Nguyễn Chí Thanh, Cầu Giấy, TP. Hà Nội</p>
+                    <p>Vui lòng gọi trước khi đến: (084) 123 4567</p>
+                `;
+                break;
+            case 'chungnhan':
+                title = "Chứng Nhận Chất Lượng";
+                content = `
+                    <p>DALAD cam kết tất cả sản phẩm Bạc S925 đều đạt tiêu chuẩn quốc tế. Chúng tôi cung cấp:</p>
+                    <ul>
+                        <li>Chứng nhận nguồn gốc Bạc S925 nhập khẩu.</li>
+                        <li>Cam kết Bạc không chứa Nickel gây dị ứng.</li>
+                        <li>Phiếu bảo hành chất lượng đi kèm mỗi sản phẩm.</li>
+                    </ul>
+                `;
+                break;
+            default:
+                title = "Thông Tin";
+                content = "<p>Nội dung đang được cập nhật. Vui lòng quay lại sau.</p>";
+        }
+        
+        openInfoModal(title, content);
+    };
+
+   
+    window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.main-nav a');
+        
+        let current = '';
+        const headerHeight = document.querySelector('.main-header')?.offsetHeight || 0;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - headerHeight - 10; 
+            if (scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(a => {
+            a.classList.remove('active');
+            if (a.getAttribute('href')?.includes(current) && !a.closest('.nav-dropdown-item')) {
+                a.classList.add('active');
+            }
+        });
+    });
+
+    
+    const speed = 200; 
+
+    const animateCounter = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+        
+        const updateCount = () => {
+            const increment = target / speed;
+            if (count < target) {
+                count = Math.ceil(count + increment);
+                counter.innerText = count.toLocaleString('vi-VN');
+                setTimeout(updateCount, 1);
+            } else {
+                counter.innerText = target.toLocaleString('vi-VN') + (target >= 100 ? '+' : '');
+            }
+        };
+        updateCount();
+    };
+
+    
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5 
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                counters.forEach(animateCounter);
+                observer.unobserve(entry.target); 
+            }
+        });
+    }, observerOptions);
+
+    if (statSection) {
+        observer.observe(statSection);
+    }
+
+    
+    const openModal = (panelName) => {
+        if (authModal) authModal.classList.remove('hidden');
+        showPanel(panelName);
+    };
+
+    const closeModal = () => {
+        if (authModal) authModal.classList.add('hidden');
+    };
+
+    const closeModalOutside = (event) => {
+        if (event.target === authModal) {
+            closeModal();
+        }
+    };
+
+    const showPanel = (panelName) => {
+        if (!loginPanel || !registerPanel || !loginTab || !registerTab) return;
+        
+        if (panelName === 'login') {
+            loginPanel.classList.remove('hidden');
+            registerPanel.classList.add('hidden');
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+        } else if (panelName === 'register') {
+            registerPanel.classList.remove('hidden');
+            loginPanel.classList.add('hidden');
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+        }
+    };
+
+    const togglePassword = (inputId) => {
+        const input = document.getElementById(inputId);
+        const icon = input?.nextElementSibling;
+
+        if (!input || !icon) return;
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    };
+
+    
+    const toggleSearchBar = () => {
+        if (!searchBar) return;
+        searchBar.classList.toggle('search-bar-visible');
+        if (searchBar.classList.contains('search-bar-visible')) {
+            searchBar.querySelector('input')?.focus();
+        }
+    };
+    // =================================================================
+    // 6. LOGIC TÌM KIẾM SẢN PHẨM (MỚI)
+    // =================================================================
+    const performSearch = () => {
+        const searchInput = document.getElementById('product-search-input');
+        // Trả về nếu không tìm thấy input
+        if (!searchInput) return; 
+
+        const query = searchInput.value.trim().toLowerCase();
+
+        // Nếu query rỗng, hiển thị tất cả sản phẩm
+        if (query === "") {
+            renderProducts(products); // products là mảng sản phẩm gốc
+            return;
+        }
+
+        // Lọc sản phẩm
+        const filteredProducts = products.filter(p => {
+            // Tìm kiếm theo Tên sản phẩm, Danh mục, và Mô tả (desc)
+            const nameMatch = p.name.toLowerCase().includes(query);
+            const categoryMatch = p.category.toLowerCase().includes(query);
+            // Thêm trường mô tả (desc) để tìm kiếm sâu hơn
+            const descMatch = p.desc ? p.desc.toLowerCase().includes(query) : false; 
+
+            return nameMatch || categoryMatch || descMatch;
+        });
+
+        // Hiển thị sản phẩm đã lọc
+        renderProducts(filteredProducts);
+        
+        // Thêm thông báo nếu không tìm thấy sản phẩm
+        const productGrid = document.getElementById('product-grid');
+        if (filteredProducts.length === 0 && productGrid) {
+            productGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: var(--light-text-color);">
+                    Không tìm thấy sản phẩm nào liên quan đến từ khóa: <strong>"${searchInput.value}"</strong>
+                </div>
+            `;
+        }
+    };
+
+
+    
+    // 7. KHỞI CHẠY 
+  
+    document.addEventListener('DOMContentLoaded', () => {
+        if (products.length > 0) {
+            renderProducts(products);
+            renderTabs();
+        }
+        updateCartDisplay();
+        
+        // Gán sự kiện cho nút "Tiến Hành Thanh Toán" trong Cart Popup
+        const checkoutBtn = document.querySelector('#cart-popup .checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.onclick = openCheckoutModal; 
+        }
+        
+        // Gán sự kiện cho form thanh toán
+        const checkoutForm = document.getElementById('checkout-form');
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', submitOrder);
+        }
+        // ✅ GÁN SỰ KIỆN CHO THANH TÌM KIẾM (MỚI)
+        const searchInput = document.getElementById('product-search-input');
+        if (searchInput) {
+            // Sự kiện 'input' giúp tìm kiếm ngay lập tức khi người dùng gõ
+            searchInput.addEventListener('input', performSearch);
+        }
+    });
+    
+    // Gán sự kiện đóng modal thanh toán khi click ra ngoài
+    window.addEventListener('click', closeCheckoutModalOutside);
+    // =================================================================
+    // LOGIC ĐĂNG KÝ NHẬN TIN (Newsletter)
+    // =================================================================
+
+    const NEWSLETTER_STORAGE_KEY = 'dalad_subscribers';
+
+    // Hàm lấy danh sách người đăng ký từ LocalStorage
+    const getSubscribers = () => {
+        const subscribersJson = localStorage.getItem(NEWSLETTER_STORAGE_KEY);
+        return subscribersJson ? JSON.parse(subscribersJson) : [];
+    };
+
+    // Hàm lưu danh sách người đăng ký vào LocalStorage
+    const saveSubscribers = (subscribers) => {
+        localStorage.setItem(NEWSLETTER_STORAGE_KEY, JSON.stringify(subscribers));
+    };
+
+    // Hàm xử lý việc gửi form
+    const handleNewsletterSubmit = (event) => {
+        event.preventDefault(); // Ngăn chặn form submit mặc định
+
+        const emailInput = document.getElementById('newsletter-email');
+        const email = emailInput.value.trim();
+
+        if (email === "") {
+            alert("Vui lòng nhập địa chỉ email.");
+            return;
+        }
+
+        const subscribers = getSubscribers();
+        
+        // Kiểm tra trùng lặp
+        if (subscribers.some(sub => sub.email === email)) {
+            alert(`Email ${email} đã được đăng ký nhận tin!`);
+            emailInput.value = '';
+            return;
+        }
+
+        const newSubscriber = {
+            id: Date.now(), // ID dựa trên thời gian
+            email: email,
+            date: new Date().toLocaleDateString('vi-VN')
+        };
+        
+        subscribers.push(newSubscriber);
+        saveSubscribers(subscribers);
+        
+        alert(`Cảm ơn bạn đã đăng ký nhận tin với email: ${email}`);
+        emailInput.value = '';
+    };
+    
+    // Gán sự kiện cho form đăng ký nhận tin
+    const newsletterForm = document.getElementById('newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+    }
+    
+
+</script>
+    
+</body>
+</html>

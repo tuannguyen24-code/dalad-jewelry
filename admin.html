@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Quản Lý DALAD Jewelry</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        /* Reset cơ bản cho Admin Panel */
+        body { background-color: #f4f7f9; }
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50; /* Màu nền Sidebar */
+            color: #ecf0f1;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+            font-family: 'Playfair Display', serif;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li a {
+            display: block;
+            padding: 15px 20px;
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background-color: #34495e;
+            border-left: 5px solid #3498db; /* Màu nhấn */
+            padding-left: 15px;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .content-section {
+            display: none;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+        }
+        .content-section.active {
+            display: block;
+        }
+        h3 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        /* Style cho bảng (Table) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+        }
+        .action-btns button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            transition: opacity 0.3s;
+        }
+        .action-btns .edit-btn { background-color: #3498db; color: white; }
+        .action-btns .delete-btn { background-color: #e74c3c; color: white; }
+        .action-btns button:hover { opacity: 0.8; }
+        
+        /* Form Styling */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .add-btn { background-color: #2ecc71; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+
+        /* Báo cáo thống kê */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .stat-card {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .stat-card h4 { color: #3498db; margin-bottom: 5px; }
+        .stat-card p { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <aside class="sidebar">
+            <h2>DALAD ADMIN</h2>
+            <ul>
+                <li><a href="#" class="nav-link active" data-section="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-section="products"><i class="fa-solid fa-box"></i> Quản Lý Sản Phẩm</a></li>
+                <li><a href="#" class="nav-link" data-section="categories"><i class="fa-solid fa-tags"></i> Quản Lý Danh Mục</a></li>
+                <li><a href="#" class="nav-link" data-section="orders"><i class="fa-solid fa-receipt"></i> Quản Lý Đơn Hàng</a></li>
+                <li><a href="#" class="nav-link" data-section="customers"><i class="fa-solid fa-users"></i> Quản Lý Khách Hàng</a></li>
+                <li><a href="index.html" target="_blank"><i class="fa-solid fa-store"></i> Xem Cửa Hàng</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <section id="subscribers" class="admin-section" style="display:none;">
+        <h3><i class="fa-solid fa-bell"></i> Danh Sách Người Đăng Ký Nhận Tin</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Ngày Đăng Ký</th>
+                </tr>
+            </thead>
+            <tbody id="subscriber-list">
+                </tbody>
+        </table>
+    </section>
+            
+            <section id="dashboard" class="content-section active">
+                <h3><i class="fa-solid fa-chart-line"></i> Báo Cáo và Thống Kê</h3>
+                <div class="stats-grid" id="stats-summary">
+                    </div>
+                </section>
+
+            <section id="products" class="content-section">
+                <h3><i class="fa-solid fa-box"></i> Quản Lý Sản Phẩm</h3>
+                <button class="add-btn" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Thêm Sản Phẩm Mới</button>
+                <table id="product-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Danh Mục</th>
+                            <th>Giá</th>
+                            <th>Tồn Kho</th>
+                            <th>Hình Ảnh</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-list">
+                        </tbody>
+                </table>
+            </section>
+
+            <section id="categories" class="content-section">
+                <h3><i class="fa-solid fa-tags"></i> Quản Lý Danh Mục</h3>
+                <button class="add-btn" onclick="openCategoryModal()"><i class="fa-solid fa-plus"></i> Thêm Danh Mục Mới</button>
+                <table id="category-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>gTên Danh Mục</th>
+                            <th>Slug (Đườn dẫn)</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="category-list">
+                        </tbody>
+                </table>
+            </section>
+
+            <section id="orders" class="content-section">
+                <h3><i class="fa-solid fa-receipt"></i> Quản Lý Đơn Hàng</h3>
+                <table id="order-table">
+                    <thead>
+                        <tr>
+                            <th>ID Đơn Hàng</th>
+                            <th>Khách Hàng</th>
+                            <th>Ngày Đặt</th>
+                            <th>Tổng Tiền</th>
+                            <th>Trạng Thái</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-list">
+                        </tbody>
+                </table>
+            </section>
+
+             <section id="customers" class="content-section">
+                <h3><i class="fa-solid fa-users"></i> Quản Lý Thông Tin Khách Hàng</h3>
+                <table id="customer-table">
+                    <thead>
+                        <tr>
+                            <th>ID Khách Hàng</th>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Số ĐT</th>
+                            <th>Tổng Chi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customer-list">
+                        </tbody>
+                </table>
+            </section>
+
+        </main>
+    </div>
+
+    <div id="product-modal" class="modal-backdrop" style="display:none;">
+        <div class="modal-content">
+            <h4>Thêm/Sửa Sản Phẩm</h4>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="form-group">
+                    <label for="product-name">Tên Sản Phẩm:</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">Danh Mục:</label>
+                    <select id="product-category" required>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label for="product-price">Giá (VNĐ):</label>
+                    <input type="number" id="product-price" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-stock">Tồn Kho:</label>
+                    <input type="number" id="product-stock" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-images">Link Hình Ảnh (URL, cách nhau bởi dấu phẩy):</label>
+                    <textarea id="product-images" rows="2"></textarea>
+                    <small>Yêu cầu quản lý hình ảnh được mô phỏng bằng cách nhập URL.</small>
+                </div>
+                <div class="action-btns">
+                    <button type="submit" class="add-btn">Lưu</button>
+                    <button type="button" onclick="closeModal('product-modal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="category-modal" class="modal-backdrop" style="display:none;">
+        <div class="modal-content">
+            <h4>Thêm/Sửa Danh Mục</h4>
+            <form id="category-form">
+                <input type="hidden" id="category-id">
+                <div class="form-group">
+                    <label for="category-name">Tên Danh Mục:</label>
+                    <input type="text" id="category-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="category-slug">Slug (Đường dẫn):</label>
+                    <input type="text" id="category-slug" required>
+                </div>
+                <div class="action-btns">
+                    <button type="submit" class="add-btn">Lưu</button>
+                    <button type="button" onclick="closeModal('category-modal')">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <style>
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-medium);
+        }
+        .modal-content h4 { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    </style>
+
+    <script src="admin.js"></script>
+</body>
+</html>
