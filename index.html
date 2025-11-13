@@ -35,12 +35,12 @@
                                 </ul>
                             </div>
                             <div class="dropdown-column price-column">
-                                <ul class="price-list">
-                                    <li class="dropdown-title">Lọc Theo Giá</li>
-                                    <li><a href="#products" onclick="navFilter('price_under5m', event)">Dưới 5 Triệu</a></li>
-                                    <li><a href="#products" onclick="navFilter('price_5m_15m', event)">5 Triệu - 15 Triệu</a></li>
-                                    <li><a href="#products" onclick="navFilter('price_over15m', event)">Trên 15 Triệu</a></li>
-                                </ul>
+                              <ul class="price-list">
+    <li class="dropdown-title">Lọc Theo Giá</li>
+    <li><a href="#products" onclick="navFilter('price_under1m', event)">Dưới 1 Triệu </a></li>
+    <li><a href="#products" onclick="navFilter('price_1m_2m', event)">1 Triệu - 2 Triệu</a></li>
+    <li><a href="#products" onclick="navFilter('price_over2m', event)">Trên 2 Triệu</a></li>
+</ul>
                             </div>
                             <div class="dropdown-column hot-column">
                                 <ul class="dropdown-column">
@@ -371,27 +371,27 @@
     <script>
     const products = [
         // --- NHẪN (6 sản phẩm) ---
-        { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 12500000, desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', image: '1.jpg', tag: 'Hot', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p5', name: 'Nhẫn Eternity Đính Đá CZ', category: 'nhan', price: 4500000, desc: 'Thanh mảnh, vĩnh cửu, đeo xếp lớp.', image: '2.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p8', name: 'Nhẫn Nơ Xinh Đá Rơi', category: 'nhan', price: 25000000, desc: 'Nơ độc đáo, chuyển động, rất nữ tính.', image: '3.jpg', tag: 'VIP', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p11', name: 'Nhẫn Nơ Đá Mini Dịu Dàng', category: 'nhan', price: 9900000, desc: 'Nhỏ gọn, duyên dáng, phong cách trẻ trung.', image: '4.jpg', tag: 'Sale', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p13', name: 'Nhẫn Nơ Hồng Thạch Anh', category: 'nhan', price: 35000000, desc: 'Đá hồng trái tim, ngọt ngào, thu hút ánh nhìn.', image: '5.jpg', tag: 'Luxury', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p14', name: 'Nhẫn Cặp Kim Cương Trái Tim', category: 'nhan', price: 6200000, desc: 'Tình yêu vĩnh cửu.', image: '6.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 425000, desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', image: '1.jpg', tag: 'Hot', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p5', name: 'Nhẫn Eternity Đính Đá CZ', category: 'nhan', price: 450000, desc: 'Thanh mảnh, vĩnh cửu, đeo xếp lớp.', image: '2.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p8', name: 'Nhẫn Nơ Xinh Đá Rơi', category: 'nhan', price: 650000, desc: 'Nơ độc đáo, chuyển động, rất nữ tính.', image: '3.jpg', tag: 'VIP', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p11', name: 'Nhẫn Nơ Đá Mini Dịu Dàng', category: 'nhan', price: 990000, desc: 'Nhỏ gọn, duyên dáng, phong cách trẻ trung.', image: '4.jpg', tag: 'Sale', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p13', name: 'Nhẫn Nơ Hồng Thạch Anh', category: 'nhan', price: 500000, desc: 'Đá hồng trái tim, ngọt ngào, thu hút ánh nhìn.', image: '5.jpg', tag: 'Luxury', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p14', name: 'Nhẫn Cặp Kim Cương Trái Tim', category: 'nhan', price: 620000, desc: 'Tình yêu vĩnh cửu.', image: '6.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
         
         // --- DÂY CHUYỀN (6 sản phẩm) ---
-        { id: 'p2', name: 'Dây Chuyền Bạc Thanh Lịch', category: 'daychuyen', price: 8900000, desc: 'Bạc S925, chuỗi hạt đá thả rơi, lấp lánh nhẹ nhàng.', image: 'vong1.jpg', tag: 'new', sizes: ['35cm', '40cm', '50cm']},
+        { id: 'p2', name: 'Dây Chuyền Bạc Thanh Lịch', category: 'daychuyen', price: 890000, desc: 'Bạc S925, chuỗi hạt đá thả rơi, lấp lánh nhẹ nhàng.', image: 'vong1.jpg', tag: 'new', sizes: ['35cm', '40cm', '50cm']},
         { id: 'p6', name: 'Dây Chuyền Bạc Nút Thắt Kim Cương', category: 'daychuyen', price: 1500000, desc: 'Bạc S925, nút thắt đá đôi, sang trọng, thanh lịch.', image: 'vong2.jpg', tag: '', sizes: ['35cm', '40cm', '50cm'] },
-        { id: 'p9', name: 'Dây Chuyền Bạc Đá Vượt Thời Gian', category: 'daychuyen', price: 6800000, desc: 'Bạc S925, chuỗi đá khối, vẻ đẹp vĩnh cửu, cổ điển.', image: 'voneg3.jpg', tag: '', sizes: ['35cm', '40cm', '50cm'] },
-        { id: 'p15', name: 'Dây Chuyền Bạc Giọt Nước Xếp Tầng', category: 'daychuyen', price: 3100000, desc: 'Bạc S925, giọt nước xếp tầng, thanh thoát, tinh xảo.', image: 'vong4.jpg', tag: 'Hot', sizes: ['35cm', '40cm', '50cm'] },
-        { id: 'p16', name: 'Dây Chuyền Bạc Hoa Tuyết Độc Đáo', category: 'daychuyen', price: 16000000, desc: 'Bạc S925, hoa tuyết lồng, tuyên ngôn phong cách cá nhân.', image: 'vong5.jpg', tag: 'VIP', sizes: ['35cm', '40cm', '50cm'] },
+        { id: 'p9', name: 'Dây Chuyền Bạc Đá Vượt Thời Gian', category: 'daychuyen', price: 680000, desc: 'Bạc S925, chuỗi đá khối, vẻ đẹp vĩnh cửu, cổ điển.', image: 'voneg3.jpg', tag: '', sizes: ['35cm', '40cm', '50cm'] },
+        { id: 'p15', name: 'Dây Chuyền Bạc Giọt Nước Xếp Tầng', category: 'daychuyen', price: 2100000, desc: 'Bạc S925, giọt nước xếp tầng, thanh thoát, tinh xảo.', image: 'vong4.jpg', tag: 'Hot', sizes: ['35cm', '40cm', '50cm'] },
+        { id: 'p16', name: 'Dây Chuyền Bạc Hoa Tuyết Độc Đáo', category: 'daychuyen', price: 1600000, desc: 'Bạc S925, hoa tuyết lồng, tuyên ngôn phong cách cá nhân.', image: 'vong5.jpg', tag: 'VIP', sizes: ['35cm', '40cm', '50cm'] },
         { id: 'p17', name: 'Dây Chuyền Bạc Mắt Xích Tinh Tế', category: 'daychuyen', price: 950000, desc: 'Bạc S925, dây mảnh, mắt xích hiện đại, tối giản.', image: 'vong6.jpg', tag: 'Sale', sizes: ['35cm', '40cm', '50cm'] },
 
         // --- LẮC TAY (6 sản phẩm) ---
         { id: 'p3', name: 'Vòng Tay Bạc Tình Yêu Charm', category: 'vongtay', price: 2100000, desc: 'Vòng hạt/bi, mặt charm hình trái tim đính đá nhỏ, có móc nối.', image: 'nhan1.jpg', tag: 'Sale', sizes: ['15cm', '16cm', '17cm', '18cm'] },
-        { id: 'p7', name: 'Vòng Tay Bạc Đá Khối Hình Học', category: 'vongtay', price: 18000000, desc: 'Vòng tay rút (bolo bracelet), dây chuỗi hộp, mặt đính 5 khối đá hình học (giọt nước, vuông, trái tim).', image: 'nhan2.jpg', tag: 'Hot', sizes: ['15cm', '16cm', '17cm', '18cm']  },
-        { id: 'p12', name: 'Vòng Tay Bạc Tim Charm Rỗng ', category: 'vongtay', price: 3200000, desc: 'Vòng tay dạng rắn (snake chain), mặt charm trái tim rỗng đính đá, có chốt khóa.', image: 'nhan3.jpg', tag: 'luxury', sizes: ['15cm', '16cm', '17cm', '18cm']  },
-        { id: 'p18', name: 'Vòng Tay Bạc Khóa Tim Duyên Dáng', category: 'vongtay', price: 22000000, desc: 'Vòng tay dạng rắn (snake chain), mặt khóa trái tim đơn giản đính đá nhỏ.', image: 'nhan4.jpg', tag: 'Luxury', sizes: ['15cm', '16cm', '17cm', '18cm']  },
-        { id: 'p19', name: 'Vòng Tay Bạc Dây Xoắn Kitty', category: 'vongtay', price: 4800000, desc: 'Vòng tay dây xoắn kép (twisted cable), mặt charm hình đầu mèo Hello Kitty (hoặc tương tự) đơn giản.', image: 'nhan5.jpg', tag: '', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p7', name: 'Vòng Tay Bạc Đá Khối Hình Học', category: 'vongtay', price: 1800000, desc: 'Vòng tay rút (bolo bracelet), dây chuỗi hộp, mặt đính 5 khối đá hình học (giọt nước, vuông, trái tim).', image: 'nhan2.jpg', tag: 'Hot', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p12', name: 'Vòng Tay Bạc Tim Charm Rỗng ', category: 'vongtay', price: 2200000, desc: 'Vòng tay dạng rắn (snake chain), mặt charm trái tim rỗng đính đá, có chốt khóa.', image: 'nhan3.jpg', tag: 'luxury', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p18', name: 'Vòng Tay Bạc Khóa Tim Duyên Dáng', category: 'vongtay', price: 2200000, desc: 'Vòng tay dạng rắn (snake chain), mặt khóa trái tim đơn giản đính đá nhỏ.', image: 'nhan4.jpg', tag: 'Luxury', sizes: ['15cm', '16cm', '17cm', '18cm']  },
+        { id: 'p19', name: 'Vòng Tay Bạc Dây Xoắn Kitty', category: 'vongtay', price: 2800000, desc: 'Vòng tay dây xoắn kép (twisted cable), mặt charm hình đầu mèo Hello Kitty (hoặc tương tự) đơn giản.', image: 'nhan5.jpg', tag: '', sizes: ['15cm', '16cm', '17cm', '18cm']  },
         { id: 'p20', name: 'Vòng Tay Bạc Tim Khảm Đính Đá', category: 'vongtay', price: 1500000, desc: 'Vòng tay dạng rắn (snake chain), mặt khóa trái tim đính đá và khảm màu trắng (men/sứ).', image: 'nhan6.jpg', tag: 'new', sizes: ['15cm', '16cm', '17cm', '18cm']  },
         
         // --- LẮC CHÂN (6 sản phẩm) ---
@@ -433,10 +433,23 @@
     };
     
     const getPriceRange = (price) => {
-        if (price < 5000000) return 'under5m'; 
-        if (price >= 5000000 && price <= 15000000) return '5m_15m';
-        return 'over15m'; 
-    };
+    // Giá trị 'price' cần được truyền vào dưới dạng số (ví dụ: 500000, 1500000).
+    
+    if (price < 1000000) {
+        return 'under1m'; // Dưới 500,000 VNĐ
+    }
+    
+    if (price >= 1000000 && price <= 2000000) {
+        return '1m_2m'; // Từ 1,000,000 đến 2,000,000 VNĐ
+    }
+    
+    if (price > 2000000) {
+        return 'over2m'; // Trên 2,000,000 VNĐ
+    }
+    
+    // Xử lý các trường hợp còn lại (500K đến dưới 1 Triệu)
+    return '500k_1m'; 
+};
 
     const showToast = (message, type = 'success') => {
         const toast = document.getElementById('success-toast');
