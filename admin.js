@@ -54,7 +54,32 @@ if (shopOrders.length > 0) {
     });
     localStorage.setItem('adminOrders', JSON.stringify(orders));
 }
+// =================================================================
+// TRONG admin.js - HÀM renderOrders
+// =================================================================
+const renderOrders = () => {
+    loadOrders(); 
+    const el = document.getElementById('orders-list-admin');
+    el.innerHTML = '';
 
+    orders.forEach(order => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>#${order.id}</td>
+            <td>${order.customer} (${order.email})</td> 
+            <td>${order.total.toLocaleString('vi-VN')} VNĐ</td>
+            <td>
+                <select onchange="updateOrderStatus('${order.id}', this.value)" class="status-select status-${order.status.replace(/\s/g, '-')}">
+                    </select>
+            </td>
+            <td>${order.date}</td>
+            <td>
+                <button class="btn btn-sm btn-info" onclick="viewOrderDetails('${order.id}')">Chi tiết</button>
+            </td>
+        `;
+        el.appendChild(row);
+    });
+};
 // =================================================================
 // 2. CHUYỂN ĐỔI GIAO DIỆN
 // =================================================================

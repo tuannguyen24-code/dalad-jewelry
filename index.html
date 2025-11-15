@@ -173,14 +173,7 @@
                 </div>
             </div>
         </section>
-<section id="purchase-history" class="content-section hidden">
-    <div class="container">
-        <h2 class="section-title">Lịch Sử Mua Hàng</h2>
-        <div id="orders-list-customer">
-            <p class="no-orders-message">Bạn chưa có đơn hàng nào.</p>
-        </div>
-    </div>
-</section>
+
     </main>
     
     <footer class="main-footer">
@@ -226,7 +219,7 @@
 </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2025 DALAD Jewelry. All Rights Reserved.
+            © 2025 DALAD Jewelry. All Rights Reserved.
         </div>
         <div id="info-modal" class="modal-overlay hidden" onclick="closeInfoModalOutside(event)">
         <div class="modal-content info-content">
@@ -240,7 +233,7 @@
     </footer>
 
   <div id="auth-modal" class="modal-overlay hidden" onclick="closeModalOutside(event)">
-    <div class="modal-content auth-content-custom"> <button class="close-modal-btn" onclick="closeModal()">&times;</button>
+    <div class="modal-content auth-content-custom"> <button class="close-modal-btn" onclick="closeModal()">×</button>
         <div class="tabs">
             <button class="tab-btn active" id="login-tab" onclick="showPanel('login')">Đăng Nhập</button>
             <button class="tab-btn" id="register-tab" onclick="showPanel('register')">Đăng Ký</button>
@@ -249,9 +242,11 @@
         <div id="login-panel" class="form-panel">
             <h3>Chào mừng </h3>
             <p>Đăng nhập để xem lịch sử đơn hàng và quản lý tài khoản.</p>
-            <form id="login-form"> <input type="email" id="login-email" placeholder="Email" required> <input type="phone" id="login-phone" placeholder="Số điện thoại" required>
+            <form id="login-form"> 
+                <input type="email" id="login-email" placeholder="Email hoặc Số điện thoại" required> 
                 <div class="password-group">
-                    <input type="password" placeholder="Mật khẩu" id="login-password-input" required> <i class="fa-solid fa-eye-slash" onclick="togglePassword('login-password-input')"></i>
+                    <input type="password" placeholder="Mật khẩu" id="login-password-input" required> 
+                    <i class="fa-solid fa-eye-slash" onclick="togglePassword('login-password-input')"></i>
                 </div>
                 <a href="#" style="display: block; text-align: right; margin-bottom: 20px; font-size: 0.9rem;">Quên mật khẩu?</a>
                 <button type="submit" class="register-btn">Đăng Nhập</button>
@@ -271,9 +266,12 @@
         <div id="register-panel" class="form-panel hidden">
             <h3>Tạo tài khoản mới</h3>
             <p>Đăng ký ngay.</p>
-            <form id="register-form"> <input type="text" id="register-name" placeholder="Họ và Tên" required> <input type="phone" id="register-phone" placeholder="Số điện thoại" required>
-                <input type="email" id="register-email" placeholder="Email" required> <div class="password-group">
-                    <input type="password" placeholder="Mật khẩu" id="register-password-input" required> <i class="fa-solid fa-eye-slash" onclick="togglePassword('register-password-input')"></i>
+            <form id="register-form"> 
+                <input type="text" id="register-name" placeholder="Họ và Tên" required> 
+                <input type="email" id="register-email" placeholder="Email hoặc Số điện thoại" required> 
+                <div class="password-group">
+                    <input type="password" placeholder="Mật khẩu" id="register-password-input" required> 
+                    <i class="fa-solid fa-eye-slash" onclick="togglePassword('register-password-input')"></i>
                 </div>
                 <label class="terms-checkbox">
                     <input type="checkbox" required> Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a>
@@ -295,7 +293,7 @@
 </div>
 <div id="checkout-modal" class="modal-overlay hidden" onclick="closeCheckoutModalOutside(event)">
         <div class="modal-content checkout-content">
-            <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+            <button class="close-btn" onclick="closeCheckoutModal()">×</button>
             
             <h2>🛒 Thanh Toán Đơn Hàng</h2>
             
@@ -351,7 +349,7 @@
         <div class="cart-popup-content">
             <div class="cart-header">
                 <h3>Giỏ Hàng Của Bạn (<span id="cart-count-header">0</span>)</h3>
-                <button class="close-cart-btn" onclick="toggleCartPopup()">&times;</button>
+                <button class="close-cart-btn" onclick="toggleCartPopup()">×</button>
             </div>
             
             <div class="cart-items" id="cart-items-container">
@@ -365,9 +363,8 @@
             </div>
         </div>
     </div>
-    
-    
-
+</body>
+</html>
 
     <script>
     const products = [
@@ -520,7 +517,6 @@ const updateAuthDisplay = () => {
                 <div class="dropdown-menu auth-dropdown-menu">
                     <ul class="auth-list">
                         <li class="dropdown-title">Tài Khoản</li>
-                        <li><a href="#purchase-history" onclick="showPurchaseHistory()">Lịch sử mua hàng</a></li>
                         <li><a href="#" onclick="handleLogout(event)">Đăng Xuất</a></li>
                     </ul>
                 </div>
@@ -725,82 +721,7 @@ const initApp = () => {
             closeCartPopup();
         }
     };
-    // =================================================================
-// CHỨC NĂNG LỊCH SỬ MUA HÀNG (PURCHASE HISTORY)
-// =================================================================
-
-const PURCHASE_HISTORY_KEY = 'dalad_orders'; // KEY mới để lưu đơn hàng
-// Lưu ý: Cần đảm bảo hàm getCurrentUser() đã được định nghĩa.
-
-// 1. Hàm lấy tất cả đơn hàng
-const getAllOrders = () => {
-    const ordersJson = localStorage.getItem(PURCHASE_HISTORY_KEY);
-    return ordersJson ? JSON.parse(ordersJson) : [];
-};
-
-// 2. Hàm chuyển đổi view sang Lịch sử mua hàng
-const showPurchaseHistory = () => {
-    // Ẩn tất cả các section khác và hiển thị section 'purchase-history'
-    document.querySelectorAll('.content-section').forEach(section => {
-        section.classList.add('hidden');
-    });
-    document.getElementById('purchase-history').classList.remove('hidden');
     
-    renderCustomerOrders();
-};
-
-// 3. Hàm hiển thị đơn hàng của riêng khách hàng
-const renderCustomerOrders = () => {
-    const user = getCurrentUser();
-    const ordersContainer = document.getElementById('orders-list-customer');
-    ordersContainer.innerHTML = '';
-    
-    if (!user) {
-        ordersContainer.innerHTML = `<p class="no-orders-message">Vui lòng đăng nhập để xem lịch sử mua hàng.</p>`;
-        return;
-    }
-
-    const allOrders = getAllOrders();
-    // Lọc đơn hàng theo email của khách hàng đang đăng nhập
-    const customerOrders = allOrders.filter(order => order.email === user.email);
-    
-    if (customerOrders.length === 0) {
-        ordersContainer.innerHTML = `<p class="no-orders-message">Bạn chưa có đơn hàng nào.</p>`;
-        return;
-    }
-
-    let html = customerOrders.map(order => `
-        <div class="order-card">
-            <h4>Mã đơn hàng: #${order.id} - ${order.status}</h4>
-            <p><strong>Ngày đặt:</strong> ${order.date}</p>
-            <p><strong>Tổng tiền:</strong> ${order.total.toLocaleString('vi-VN')} VNĐ</p>
-            <p><strong>Trạng thái:</strong> <span class="order-status status-${order.status.replace(/\s/g, '-')}">${order.status}</span></p>
-            <div class="order-items-detail hidden" id="detail-${order.id}">
-                <h5>Chi tiết sản phẩm:</h5>
-                <ul>
-                    ${order.items.map(item => `
-                        <li>${item.name} (x${item.qty}) - ${item.price.toLocaleString('vi-VN')} VNĐ</li>
-                    `).join('')}
-                </ul>
-            </div>
-            <button class="btn btn-sm btn-secondary" onclick="document.getElementById('detail-${order.id}').classList.toggle('hidden')">
-                Xem chi tiết
-            </button>
-        </div>
-    `).join('');
-
-    ordersContainer.innerHTML = html;
-};
-
-// 4. CẬP NHẬT LOGIC ĐẶT HÀNG (Nếu bạn có form đặt hàng/thanh toán)
-// Cần đảm bảo rằng khi khách hàng đặt hàng thành công, đơn hàng mới được lưu vào LocalStorage
-// Dưới đây là ví dụ về cách lưu (Cần thay thế hàm đặt hàng thực tế của bạn)
-
-const saveOrder = (newOrder) => {
-    const orders = getAllOrders();
-    orders.push(newOrder);
-    localStorage.setItem(PURCHASE_HISTORY_KEY, JSON.stringify(orders));
-};
     // 3. LOGIC GIỎ HÀNG (CART LOGIC)
  
 
