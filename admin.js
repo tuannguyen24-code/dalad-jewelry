@@ -2,19 +2,26 @@
 // DỮ LIỆU MOCK (Thay thế cho Database)
 // =================================================================
 const initialProducts = [
-    { id: 1, name: "Nhẫn Bạc Hoa Tuyết", category: "nhan", price: 550000, stock: 50, images: ['vong4.jpg'] },
-    { id: 2, name: "Dây Chuyền Trái Tim", category: "daychuyen", price: 890000, stock: 35, images: ["vong5.jpg"] },
+    // Thêm description và discount
+    { id: 1, name: "Nhẫn Bạc Hoa Tuyết", category: "nhan", description: "Nhẫn bạc S925 đính đá CZ hình hoa tuyết tinh xảo. Phù hợp cho dịp Giáng Sinh.", price: 550000, stock: 50, images: ['vong4.jpg'], discount: "Giảm 10%" },
+    { id: 2, name: "Dây Chuyền Trái Tim", category: "daychuyen", description: "Dây chuyền mặt trái tim lồng đôi, làm từ vàng trắng 14K. Món quà hoàn hảo cho người yêu.", price: 890000, stock: 35, images: ["vong5.jpg"], discount: "" },
+    // Thêm một sản phẩm mới để mô phỏng data
+    { id: 3, name: "Vòng Tay Chuỗi Ngọc", category: "vongtay", description: "Vòng tay chuỗi ngọc trai nước ngọt, thanh lịch và quý phái.", price: 1200000, stock: 15, images: ["vong6.jpg"], discount: "Miễn phí hộp quà" },
 ];
 
 const initialCategories = [
     { id: 101, name: "Nhẫn", slug: "nhan" },
     { id: 102, name: "Dây Chuyền", slug: "daychuyen" },
     { id: 103, name: "Bông Tai", slug: "bongtai" },
+    // Thêm danh mục mới
+    { id: 104, name: "Vòng Tay", slug: "vongtay" },
 ];
 
 const initialOrders = [
-    { id: 'DH001', customer: 'Nguyễn Văn A', email: 'a@example.com', phone: '0901234567', total: 1200000, status: 'Đã giao', date: '2025-10-20', items: [{ name: "Nhẫn Bạc Hoa Tuyết", qty: 2, price: 550000 }] },
+    // Thêm trường items chi tiết hơn
+    { id: 'DH001', customer: 'Nguyễn Văn A', email: 'a@example.com', phone: '0901234567', total: 1200000, status: 'Đã giao', date: '2025-10-20', items: [{ name: "Nhẫn Bạc Hoa Tuyết", qty: 2, price: 550000 }, { name: "Dây Chuyền Trái Tim", qty: 1, price: 100000 }] }, 
     { id: 'DH002', customer: 'Trần Thị B', email: 'b@example.com', phone: '0987654321', total: 890000, status: 'Đang xử lý', date: '2025-11-05', items: [{ name: "Dây Chuyền Trái Tim", qty: 1, price: 890000 }] },
+    { id: 'DH003', customer: 'Lê Văn C', email: 'c@example.com', phone: '0912345678', total: 1200000, status: 'Đã giao', date: '2025-11-10', items: [{ name: "Vòng Tay Chuỗi Ngọc", qty: 1, price: 1200000 }] },
 ];
 
 // =================================================================
@@ -27,6 +34,11 @@ const getLocalStorageData = (key, initialData) => {
 
 function saveToLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
+    
+    // LOGIC ĐỒNG BỘ GIÁ SẢN PHẨM VỀ TRANG WEB (Key: dalad_products)
+    if (key === 'adminProducts') {
+        localStorage.setItem('dalad_products', JSON.stringify(data)); 
+    }
 }
 
 let products = getLocalStorageData('adminProducts', initialProducts);
@@ -37,6 +49,7 @@ let orders = getLocalStorageData('adminOrders', initialOrders);
 const shopOrders = JSON.parse(localStorage.getItem('dalad_orders') || '[]');
 if (shopOrders.length > 0) {
     shopOrders.forEach(o => {
+        // Chỉ thêm nếu đơn hàng chưa tồn tại trong danh sách admin
         if (!orders.some(x => x.id === o.id)) orders.push(o);
     });
     localStorage.setItem('adminOrders', JSON.stringify(orders));
@@ -56,6 +69,7 @@ const switchSection = (sectionId) => {
     if (sectionId === 'categories') renderCategoryList();
     if (sectionId === 'orders') renderOrderList();
     if (sectionId === 'customers') renderCustomerList();
+    if (sectionId === 'inventory') renderInventoryList(); 
     if (sectionId === 'dashboard') renderDashboardStats();
 };
 
@@ -63,7 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            switchSection(e.target.getAttribute('data-section'));
+            const sectionId = e.target.getAttribute('data-section') || e.target.closest('a').getAttribute('data-section');
+            if (sectionId) switchSection(sectionId);
         });
     });
     switchSection('dashboard');
@@ -79,17 +94,20 @@ const renderProductList = () => {
     const productList = document.getElementById('product-list');
     productList.innerHTML = '';
     products.forEach(p => {
+        const categoryName = categories.find(c => c.slug === p.category)?.name || p.category;
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${p.id}</td>
             <td>${p.name}</td>
-            <td>${p.category}</td>
+            <td>${categoryName}</td>
             <td>${p.price.toLocaleString('vi-VN')} VNĐ</td>
             <td>${p.stock}</td>
             <td>${p.images.length} ảnh</td>
             <td>
-                <button class="edit-btn" onclick="openProductModal(${p.id})">Sửa</button>
-                <button class="delete-btn" onclick="deleteProduct(${p.id})">Xóa</button>
+                <div class="action-btns">
+                    <button class="edit-btn" onclick="openProductModal(${p.id})">Sửa</button>
+                    <button class="delete-btn" onclick="deleteProduct(${p.id})">Xóa</button>
+                </div>
             </td>
         `;
         productList.appendChild(row);
@@ -109,6 +127,8 @@ const openProductModal = (id) => {
         if (p) {
             document.getElementById('product-id').value = p.id;
             document.getElementById('product-name').value = p.name;
+            document.getElementById('product-description').value = p.description || ''; 
+            document.getElementById('product-discount').value = p.discount || ''; 
             document.getElementById('product-price').value = p.price;
             document.getElementById('product-stock').value = p.stock;
             document.getElementById('product-category').value = p.category;
@@ -125,19 +145,26 @@ const handleProductSubmit = (e) => {
     e.preventDefault();
     const id = document.getElementById('product-id').value;
     const name = document.getElementById('product-name').value;
-    const price = parseInt(document.getElementById('product-price').value);
+    const description = document.getElementById('product-description').value;
+    const discount = document.getElementById('product-discount').value;
+    const price = parseInt(document.getElementById('product-price').value); 
     const stock = parseInt(document.getElementById('product-stock').value);
     const category = document.getElementById('product-category').value;
     const images = document.getElementById('product-images').value.split(',').map(i => i.trim()).filter(i => i);
 
+    const newProductData = { name, price, stock, category, images, description, discount }; 
+
     if (id) {
         const i = products.findIndex(p => p.id === parseInt(id));
-        if (i !== -1) products[i] = { ...products[i], name, price, stock, category, images };
+        if (i !== -1) products[i] = { ...products[i], ...newProductData };
     } else {
         const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-        products.push({ id: newId, name, price, stock, category, images });
+        products.push({ id: newId, ...newProductData });
     }
-    saveToLocalStorage('adminProducts', products);
+    
+    // LƯU VÀO LOCAL STORAGE VÀ ĐỒNG BỘ CHO TRANG WEB
+    saveToLocalStorage('adminProducts', products); 
+    
     renderProductList();
     closeModal('product-modal');
 };
@@ -163,8 +190,10 @@ const renderCategoryList = () => {
             <td>${c.name}</td>
             <td>${c.slug}</td>
             <td>
-                <button class="edit-btn" onclick="openCategoryModal(${c.id})">Sửa</button>
-                <button class="delete-btn" onclick="deleteCategory(${c.id})">Xóa</button>
+                <div class="action-btns">
+                    <button class="edit-btn" onclick="openCategoryModal(${c.id})">Sửa</button>
+                    <button class="delete-btn" onclick="deleteCategory(${c.id})">Xóa</button>
+                </div>
             </td>`;
         el.appendChild(row);
     });
@@ -215,53 +244,53 @@ const deleteCategory = (id) => {
 };
 
 // =================================================================
-// HÀM TIỆN ÍCH CHO ĐƠN HÀNG (MỚI)
-// =================================================================
-const formatOrderItems = (items) => {
-    // Mỗi item có cấu trúc { name: string, qty: number, price: number }
-    return items.map(item => {
-        // Có thể thêm size nếu có trong data, hiện tại chỉ dùng tên và số lượng
-        return `• ${item.name} x ${item.qty}`;
-    }).join('<br>'); // Dùng <br> để mỗi sản phẩm hiển thị trên một dòng
-};
-
-// =================================================================
-// 5. QUẢN LÝ ĐƠN HÀNG & KHÁCH HÀNG (ĐÃ SỬA ĐỔI)
+// 5. QUẢN LÝ ĐƠN HÀNG & KHÁCH HÀNG
 // =================================================================
 const renderOrderList = () => {
     const el = document.getElementById('order-list');
     el.innerHTML = '';
     orders.forEach(o => {
         let statusColor = '';
-        // Hàm getStatusClass sẽ là cách tốt hơn, nhưng giữ nguyên style attribute theo code cũ
         if (o.status === 'Đã giao') statusColor = 'style="color:green;font-weight:bold"';
         else if (o.status === 'Đang xử lý') statusColor = 'style="color:orange;font-weight:bold"';
         else if (o.status === 'Đã hủy') statusColor = 'style="color:red;font-weight:bold"';
-
-        const productListHTML = formatOrderItems(o.items); // Lấy danh sách sản phẩm
 
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${o.id}</td>
             <td>${o.customer}</td>
-            <td>${o.phone || 'N/A'}</td> <td>${productListHTML}</td> <td>${o.total.toLocaleString('vi-VN')} VNĐ</td>
             <td>${o.date}</td>
+            <td>${o.total.toLocaleString('vi-VN')} VNĐ</td>
             <td ${statusColor}>${o.status}</td>
-            <td><button class="edit-btn" onclick="promptUpdateOrderStatus('${o.id}','${o.status}')">Cập nhật TT</button></td>
+            <td>
+                <div class="action-btns">
+                    <button class="edit-btn" onclick="promptUpdateOrderStatus('${o.id}','${o.status}')">Cập nhật TT</button>
+                    <button class="delete-btn" onclick="deleteOrder('${o.id}')">Xóa</button> 
+                </div>
+            </td>
         `;
         el.appendChild(row);
     });
 };
 
 const promptUpdateOrderStatus = (id, current) => {
-    const newStatus = prompt(`Cập nhật trạng thái cho đơn ${id} (Hiện tại: ${current})`);
+    const newStatus = prompt(`Cập nhật trạng thái cho đơn ${id} (Hiện tại: ${current}). Vui lòng nhập: Chờ xử lý, Đang giao, Đã giao, Đã hủy`);
     if (newStatus) {
         const order = orders.find(o => o.id === id);
         if (order) {
-            order.status = newStatus;
+            order.status = newStatus.trim();
             saveToLocalStorage('adminOrders', orders);
             renderOrderList();
         }
+    }
+};
+
+const deleteOrder = (id) => {
+    if (confirm(`Bạn có chắc chắn muốn xóa vĩnh viễn đơn hàng ${id} này không? Hành động này không thể hoàn tác.`)) {
+        orders = orders.filter(o => o.id !== id); 
+        saveToLocalStorage('adminOrders', orders); 
+        renderOrderList(); 
+        alert(`Đơn hàng ${id} đã được xóa thành công.`);
     }
 };
 
@@ -270,11 +299,15 @@ const renderCustomerList = () => {
     el.innerHTML = '';
     const map = new Map();
     orders.forEach(o => {
-        if (!map.has(o.phone)) {
-            map.set(o.phone, { id: Math.random().toString(36).substring(7).toUpperCase(), name: o.customer, email: o.email, phone: o.phone, totalSpent: o.total });
-        } else {
-            const c = map.get(o.phone);
-            c.totalSpent += o.total;
+        // Lấy thông tin khách hàng từ đơn hàng đã hoàn tất (Đã giao)
+        if (o.status === 'Đã giao' || o.status === 'Đang xử lý') { 
+            if (!map.has(o.phone)) {
+                // Giả định email và phone là duy nhất
+                map.set(o.phone, { id: Math.random().toString(36).substring(7).toUpperCase(), name: o.customer, email: o.email, phone: o.phone, totalSpent: o.total });
+            } else {
+                const c = map.get(o.phone);
+                c.totalSpent += o.total;
+            }
         }
     });
     map.forEach(c => {
@@ -285,18 +318,94 @@ const renderCustomerList = () => {
 };
 
 // =================================================================
-// 6. THỐNG KÊ DOANH THU
+// 6. QUẢN LÝ KHO HÀNG (ĐÃ CẬP NHẬT CHỨC NĂNG CHỈNH SỬA)
+// =================================================================
+const renderInventoryList = () => {
+    const el = document.getElementById('inventory-list');
+    el.innerHTML = '';
+    products.forEach(p => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>${p.stock}</td>
+            
+            <td><input type="number" id="stock-${p.id}" value="${p.stock}" style="width: 80px;" min="0"></td>
+            
+            <td><input type="text" id="discount-${p.id}" value="${p.discount || ''}" style="width: 100%; min-width: 150px;"></td> 
+
+            <td>
+                <div class="action-btns">
+                    <button class="edit-btn" onclick="updateInventory(${p.id})">Cập nhật</button>
+                </div>
+            </td>
+        `;
+        el.appendChild(row);
+    });
+};
+
+const updateInventory = (id) => {
+    // Lấy giá trị tồn kho mới
+    const newStockEl = document.getElementById(`stock-${id}`);
+    const newStock = parseInt(newStockEl.value);
+
+    // Lấy giá trị khuyến mãi mới
+    const newDiscountEl = document.getElementById(`discount-${id}`);
+    const newDiscount = newDiscountEl.value.trim();
+
+    const productIndex = products.findIndex(p => p.id === id);
+
+    if (productIndex !== -1 && !isNaN(newStock) && newStock >= 0) {
+        // Cập nhật Tồn kho và Khuyến mãi
+        products[productIndex].stock = newStock;
+        products[productIndex].discount = newDiscount;
+        
+        // Lưu và đồng bộ
+        saveToLocalStorage('adminProducts', products);
+        
+        alert(`Đã cập nhật kho hàng cho sản phẩm ${products[productIndex].name}.\n- Tồn kho: ${newStock}\n- Khuyến mãi: ${newDiscount || 'Không'}`);
+        
+        // Tải lại danh sách tồn kho sau khi cập nhật
+        renderInventoryList();
+    } else {
+        alert("Giá trị Tồn kho không hợp lệ. Vui lòng nhập số nguyên không âm.");
+        // Đặt lại giá trị cũ nếu nhập sai
+        newStockEl.value = products[productIndex].stock; 
+    }
+};
+
+// =================================================================
+// 7. THỐNG KÊ DOANH THU & BÁO CÁO
 // =================================================================
 const renderDashboardStats = () => {
     const el = document.getElementById('stats-summary');
     el.innerHTML = '';
-    const success = orders.filter(o => o.status === 'Đã giao');
-    const totalRev = success.reduce((s, o) => s + o.total, 0);
+    const successOrders = orders.filter(o => o.status === 'Đã giao');
+    const totalRev = successOrders.reduce((s, o) => s + o.total, 0);
+
+    // Tính toán sản phẩm bán chạy (dựa trên số lượng bán được)
+    const salesMap = new Map();
+    successOrders.forEach(o => {
+        o.items.forEach(item => {
+            const currentQty = salesMap.get(item.name) || 0;
+            salesMap.set(item.name, currentQty + item.qty);
+        });
+    });
+
+    let bestSeller = { name: "N/A", qty: 0 };
+    salesMap.forEach((qty, name) => {
+        if (qty > bestSeller.qty) {
+            bestSeller = { name, qty };
+        }
+    });
+
     const stats = [
-        { title: 'Tổng Doanh Thu', value: `${totalRev.toLocaleString('vi-VN')} VNĐ` },
+        { title: 'Tổng Doanh Thu Đã Giao', value: `${totalRev.toLocaleString('vi-VN')} VNĐ` },
         { title: 'Tổng Đơn Hàng', value: orders.length },
         { title: 'Số Sản Phẩm', value: products.length },
+        { title: 'Sản Phẩm Bán Chạy', value: `${bestSeller.name} (${bestSeller.qty} SP)` },
     ];
+    
     stats.forEach(s => {
         const card = document.createElement('div');
         card.className = 'stat-card';
@@ -306,7 +415,7 @@ const renderDashboardStats = () => {
 };
 
 // =================================================================
-// 7. HÀM TIỆN ÍCH KHÁC
+// 8. HÀM TIỆN ÍCH KHÁC
 // =================================================================
 const closeModal = (id) => {
     document.getElementById(id).style.display = 'none';

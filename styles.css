@@ -835,11 +835,31 @@ h2 {
 }
 
 .terms-checkbox {
-    display: block;
+    /* Sử dụng flex để căn chỉnh */
+    display: flex;
+    align-items: center; /* Căn chỉnh checkbox và text giữa theo chiều dọc */
+    gap: 8px; /* Khoảng cách giữa checkbox và nội dung */
+    
     font-size: 0.9rem;
     margin-bottom: 20px;
 }
 
+/* Đảm bảo checkbox không chiếm quá nhiều không gian */
+.terms-checkbox input[type="checkbox"] {
+    flex-shrink: 0; /* Ngăn không cho checkbox bị co lại */
+    margin: 0; /* Xóa bất kỳ margin nào có thể gây xuống dòng */
+    width: auto;
+    height: auto;
+}
+
+/* Đảm bảo văn bản còn lại chiếm phần không gian còn lại */
+.terms-checkbox label, 
+.terms-checkbox p,
+.terms-checkbox span {
+    display: inline; /* Quan trọng: Đảm bảo nội dung không phải block */
+    margin: 0;
+    line-height: 1.5;
+}
 .register-btn {
     width: 100%;
     padding: 12px;
@@ -1778,47 +1798,7 @@ h2 {
 .nav-dropdown-item:hover .dropdown-menu {
     display: none; /* Tắt hiệu ứng hover cho mobile */
 }
-/* Trong styles.css, bên trong @media (max-width: 800px) */
 
-/* 1. Tối ưu Container và Sections */
-.container {
-    padding: 0 15px; /* Thêm padding ngang cho dễ nhìn */
-}
-
-/* 2. Tối ưu Product Grid */
-.product-list {
-    /* Chuyển từ 4 cột sang 2 cột cho màn hình vừa */
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 15px;
-}
-
-/* Nếu màn hình nhỏ hơn nữa (ví dụ: max-width: 480px) */
-@media (max-width: 480px) {
-    .product-list {
-        /* Chuyển sang 1 cột duy nhất cho màn hình rất nhỏ */
-        grid-template-columns: 1fr; 
-    }
-}
-
-
-/* 3. Tối ưu Banner/Hero Section (nếu có) */
-.hero-section {
-    padding: 60px 0; /* Giảm padding trên/dưới */
-}
-
-.hero-content h1 {
-    font-size: 2rem; /* Giảm kích thước chữ tiêu đề */
-}
-
-/* 4. Tối ưu Footer (chuyển sang hiển thị theo cột) */
-.footer-container {
-    grid-template-columns: 1fr; /* 1 cột duy nhất */
-    text-align: center;
-}
-
-.footer-nav {
-    margin-bottom: 20px;
-}
     .checkout-container {
         flex-direction: column;
         gap: 20px;
@@ -1876,4 +1856,225 @@ h2 {
     font-size: 1rem;
     font-family: 'Roboto', sans-serif;
     resize: vertical; /* Chỉ cho phép kéo dãn theo chiều dọc */
+}
+/* ================================================================= */
+/* 9. STYLING CHO ĐĂNG NHẬP/ĐĂNG KÝ (AUTH MODAL) */
+/* ================================================================= */
+
+.auth-content-custom {
+    max-width: 450px;
+    padding: 20px;
+}
+
+.auth-content-custom h3 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.auth-content-custom .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.auth-content-custom .tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--light-text-color);
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-duration);
+}
+
+.auth-content-custom .tab-btn.active {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.auth-content-custom .form-panel {
+    padding: 10px 0;
+}
+
+.auth-content-custom .form-panel input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.auth-content-custom .form-panel .register-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 10px;
+    transition: background-color var(--transition-duration);
+}
+
+.auth-content-custom .form-panel .register-btn:hover {
+    background-color: #55708c; /* Màu đậm hơn primary */
+}
+
+/* Password group */
+.auth-content-custom .password-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.auth-content-custom .password-group input {
+    margin-bottom: 0;
+}
+
+.auth-content-custom .password-group i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--light-text-color);
+}
+
+.auth-content-custom .divider {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 0.9rem;
+    color: var(--light-text-color);
+    position: relative;
+}
+
+.auth-content-custom .divider::before,
+.auth-content-custom .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background-color: #eee;
+}
+
+.auth-content-custom .divider::before { left: 0; }
+.auth-content-custom .divider::after { right: 0; }
+
+/* Social Login */
+.auth-content-custom .social-login {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.auth-content-custom .social-login a {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: opacity var(--transition-duration);
+}
+
+.auth-content-custom .social-login a i {
+    margin-right: 8px;
+}
+
+.auth-content-custom .google-btn {
+    background-color: #db4437;
+    color: white;
+    border: 1px solid #db4437;
+}
+
+.auth-content-custom .facebook-btn {
+    background-color: #4267B2;
+    color: white;
+    border: 1px solid #4267B2;
+}
+
+/* Checkbox */
+.auth-content-custom .terms-checkbox {
+    display: block;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.auth-content-custom .terms-checkbox input {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* --- Styling cho Nav Bar khi ĐÃ ĐĂNG NHẬP --- */
+
+/* Style cho nút Đăng nhập/Tên tài khoản trên Header */
+.main-nav .nav-icon-item a[title="Tài Khoản"] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.main-nav .nav-icon-item a[title="Tài Khoản"]:hover {
+    background-color: var(--secondary-color);
+}
+
+
+/* Styling cho menu thả xuống khi đã đăng nhập */
+.auth-dropdown-menu {
+    right: 0;
+    left: unset !important; /* Đảm bảo menu hiển thị bên phải */
+    min-width: 150px;
+    padding: 10px 0;
+}
+
+.auth-dropdown-menu .auth-list li a {
+    padding: 10px 20px;
+    display: block;
+}
+
+.auth-dropdown-menu .dropdown-title {
+    padding: 10px 20px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+/* ================================================================= */
+/* TOAST NOTIFICATION STYLES */
+/* ================================================================= */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 25px;
+    border-radius: 8px;
+    color: var(--white);
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.success-toast {
+    background-color: #4CAF50; /* Xanh lá */
+}
+
+.error-toast {
+    background-color: #F44336; /* Đỏ */
+}
+
+.info-toast {
+    background-color: #2196F3; /* Xanh dương */
 }

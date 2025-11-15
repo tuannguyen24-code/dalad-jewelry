@@ -121,11 +121,11 @@
         <aside class="sidebar">
             <h2>DALAD ADMIN</h2>
             <ul>
-                <li><a href="#" class="nav-link active" data-section="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+                <li><a href="#" class="nav-link active" data-section="dashboard"><i class="fa-solid fa-chart-line"></i> Báo Cáo và Thống Kê</a></li>
                 <li><a href="#" class="nav-link" data-section="products"><i class="fa-solid fa-box"></i> Quản Lý Sản Phẩm</a></li>
-                <li><a href="#" class="nav-link" data-section="categories"><i class="fa-solid fa-tags"></i> Quản Lý Danh Mục</a></li>
                 <li><a href="#" class="nav-link" data-section="orders"><i class="fa-solid fa-receipt"></i> Quản Lý Đơn Hàng</a></li>
                 <li><a href="#" class="nav-link" data-section="customers"><i class="fa-solid fa-users"></i> Quản Lý Khách Hàng</a></li>
+                <li><a href="#" class="nav-link" data-section="inventory"><i class="fa-solid fa-warehouse"></i> Quản Lý Kho Hàng</a></li>
                 <li><a href="index.html" target="_blank"><i class="fa-solid fa-store"></i> Xem Cửa Hàng</a></li>
             </ul>
         </aside>
@@ -145,9 +145,8 @@
                 </tbody>
         </table>
     </section>
-            
             <section id="dashboard" class="content-section active">
-                <h3><i class="fa-solid fa-chart-line"></i> Báo Cáo và Thống Kê</h3>
+                <h3><i class="fa-solid fa-chart-line"></i> Báo Cáo và Thống Kê (Doanh Thu, Đơn Hàng, Sản Phẩm Bán Chạy)</h3>
                 <div class="stats-grid" id="stats-summary">
                     </div>
                 </section>
@@ -158,10 +157,10 @@
                 <table id="product-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Mã SP</th>
                             <th>Tên Sản Phẩm</th>
-                            <th>Danh Mục</th>
-                            <th>Giá</th>
+                            <th>Loại Trang Sức</th>
+                            <th>Giá Bán</th>
                             <th>Tồn Kho</th>
                             <th>Hình Ảnh</th>
                             <th>Thao Tác</th>
@@ -173,43 +172,49 @@
             </section>
 
             <section id="categories" class="content-section">
-                <h3><i class="fa-solid fa-tags"></i> Quản Lý Danh Mục</h3>
-                <button class="add-btn" onclick="openCategoryModal()"><i class="fa-solid fa-plus"></i> Thêm Danh Mục Mới</button>
-                <table id="category-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>gTên Danh Mục</th>
-                            <th>Slug (Đườn dẫn)</th>
-                            <th>Thao Tác</th>
-                        </tr>
-                    </thead>
                     <tbody id="category-list">
                         </tbody>
                 </table>
             </section>
 
-            <section id="orders" class="content-section">
-                <h3><i class="fa-solid fa-receipt"></i> Quản Lý Đơn Hàng</h3>
-               <table id="order-list-table">
-    <thead>
-        <tr>
-            <th>ID Đơn</th>
-            <th>Khách Hàng</th>
-            <th>SĐT</th>
-            <th>Sản Phẩm</th> <th>Tổng Tiền</th>
-            <th>Ngày Đặt</th>
-            <th>Trạng Thái</th>
-            <th>Thao Tác</th>
-        </tr>
-    </thead>
-    <tbody id="order-list">
+           <section id="orders" class="content-section">
+    <h3><i class="fa-solid fa-receipt"></i> Quản Lý Đơn Hàng</h3>
+    <table id="order-table">
+        <thead>
+            <tr>
+                <th>Mã Đơn Hàng</th>
+                <th>Khách Hàng</th>
+                <th>Ngày Đặt</th>
+                <th>Tổng Tiền</th>
+                <th>Trạng Thái</th>
+                <th>Thao Tác</th> 
+                </tr>
+        </thead>
+        <tbody id="order-list">
         </tbody>
-</table>
+    </table>
+</section>
+            
+            <section id="inventory" class="content-section">
+                <h3><i class="fa-solid fa-warehouse"></i> Quản Lý Kho Hàng</h3>
+             
+                <table id="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Mã SP</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Tồn Kho Hiện Tại</th>
+                            <th>Cập Nhật Tồn Kho Mới</th>
+                            <th>Khuyến Mãi</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-list">
+                        </tbody>
+                </table>
             </section>
-
-             <section id="customers" class="content-section">
-                <h3><i class="fa-solid fa-users"></i> Quản Lý Thông Tin Khách Hàng</h3>
+            <section id="customers" class="content-section">
+                <h3><i class="fa-solid fa-users"></i> Quản Lý Thông Tin Khách Hàng (Lịch Sử Mua Hàng)</h3>
                 <table id="customer-table">
                     <thead>
                         <tr>
@@ -238,12 +243,16 @@
                     <input type="text" id="product-name" required>
                 </div>
                 <div class="form-group">
-                    <label for="product-category">Danh Mục:</label>
+                    <label for="product-category">Danh Mục (Loại Trang Sức):</label>
                     <select id="product-category" required>
                         </select>
                 </div>
                 <div class="form-group">
-                    <label for="product-price">Giá (VNĐ):</label>
+                    <label for="product-description">Mô Tả Chi Tiết:</label>
+                    <textarea id="product-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="product-price">Giá Bán (VNĐ):</label>
                     <input type="number" id="product-price" required>
                 </div>
                 <div class="form-group">
@@ -251,9 +260,13 @@
                     <input type="number" id="product-stock" required>
                 </div>
                 <div class="form-group">
-                    <label for="product-images">Link Hình Ảnh (URL, cách nhau bởi dấu phẩy):</label>
+                    <label for="product-images">Link Hình Ảnh Minh Họa (URL, cách nhau bởi dấu phẩy):</label>
                     <textarea id="product-images" rows="2"></textarea>
                     <small>Yêu cầu quản lý hình ảnh được mô phỏng bằng cách nhập URL.</small>
+                </div>
+                <div class="form-group">
+                    <label for="product-discount">Khuyến Mãi (VD: Giảm 10%, Miễn phí vận chuyển):</label>
+                    <input type="text" id="product-discount">
                 </div>
                 <div class="action-btns">
                     <button type="submit" class="add-btn">Lưu</button>

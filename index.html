@@ -15,7 +15,7 @@
             <nav class="main-nav">
                 <ul>
                     <li><a href="#home" class="active">Trang Chủ</a></li>
-                    
+                   
                     
                     <li class="nav-dropdown-item">
                         <a href="#products">
@@ -61,7 +61,7 @@
             <div class="header-actions">
                 <button onclick="toggleSearchBar()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <button onclick="toggleCartPopup()"><i class="fa-solid fa-bag-shopping"></i><span class="cart-count" id="cart-count">0</span></button>
-                <button class="user-btn" onclick="openModal('register')"><i class="fa-solid fa-user"></i></button>
+                <button class="nav-icon-item" id="auth-nav-item" onclick="openAuthModal(false, event)"><i class="fa-regular fa-user"></i></button>
             </div>
         </div>
         
@@ -82,8 +82,8 @@
             </div>
             <div class="hero-center">
                 <p>Khuyến Mãi Lớn</p>
-                <h1 class="sale-title">LÊN TỚI 50%</h1>
-                <p>Trên mọi sản phẩm nhẫn và dây chuyền.</p>
+                <h1 class="sale-title">FREESHIP</h1>
+                <p>Mọi đơn hàng.</p>
                 <a href="#products" class="primary-btn">Xem Ngay Cửa Hàng <i class="fa-solid fa-arrow-right"></i></a>
                 <div class="image-small-wrapper" style="background-image: url('mau3.png');"></div>
             </div>
@@ -173,7 +173,14 @@
                 </div>
             </div>
         </section>
-
+<section id="purchase-history" class="content-section hidden">
+    <div class="container">
+        <h2 class="section-title">Lịch Sử Mua Hàng</h2>
+        <div id="orders-list-customer">
+            <p class="no-orders-message">Bạn chưa có đơn hàng nào.</p>
+        </div>
+    </div>
+</section>
     </main>
     
     <footer class="main-footer">
@@ -232,66 +239,60 @@
     </div>
     </footer>
 
-    <div id="auth-modal" class="modal-overlay hidden" onclick="closeModalOutside(event)">
-        <div class="modal-content">
-            <button class="close-modal-btn" onclick="closeModal()">&times;</button>
-            <div class="tabs">
-                <button class="tab-btn active" id="login-tab" onclick="showPanel('login')">Đăng Nhập</button>
-                <button class="tab-btn" id="register-tab" onclick="showPanel('register')">Đăng Ký</button>
-            </div>
+  <div id="auth-modal" class="modal-overlay hidden" onclick="closeModalOutside(event)">
+    <div class="modal-content auth-content-custom"> <button class="close-modal-btn" onclick="closeModal()">&times;</button>
+        <div class="tabs">
+            <button class="tab-btn active" id="login-tab" onclick="showPanel('login')">Đăng Nhập</button>
+            <button class="tab-btn" id="register-tab" onclick="showPanel('register')">Đăng Ký</button>
+        </div>
 
-            <div id="login-panel" class="form-panel">
-                <h3>Chào mừng </h3>
-                <p>Đăng nhập để xem lịch sử đơn hàng và quản lý tài khoản.</p>
-                <form>
-                    <input type="email" placeholder="Email" required>
-                    <div class="password-group">
-                        <input type="password" placeholder="Mật khẩu" id="login-password" required>
-                        <i class="fa-solid fa-eye-slash" onclick="togglePassword('login-password')"></i>
-                    </div>
-                    <a href="#" style="display: block; text-align: right; margin-bottom: 20px; font-size: 0.9rem;">Quên mật khẩu?</a>
-                    <button type="submit" class="register-btn">Đăng Nhập</button>
-                </form>
-                <div class="divider">HOẶC</div>
-                <div class="social-login">
-    <a href="https://accounts.google.com/signin" target="_blank" class="google-btn">
-        <i class="fab fa-google"></i> Google
-    </a> 
-    
-    <a href="https://www.facebook.com/login/" target="_blank" class="facebook-btn">
-        <i class="fab fa-facebook-f"></i> Facebook
-    </a>
-</div>
+        <div id="login-panel" class="form-panel">
+            <h3>Chào mừng </h3>
+            <p>Đăng nhập để xem lịch sử đơn hàng và quản lý tài khoản.</p>
+            <form id="login-form"> <input type="email" id="login-email" placeholder="Email" required> <input type="phone" id="login-phone" placeholder="Số điện thoại" required>
+                <div class="password-group">
+                    <input type="password" placeholder="Mật khẩu" id="login-password-input" required> <i class="fa-solid fa-eye-slash" onclick="togglePassword('login-password-input')"></i>
+                </div>
+                <a href="#" style="display: block; text-align: right; margin-bottom: 20px; font-size: 0.9rem;">Quên mật khẩu?</a>
+                <button type="submit" class="register-btn">Đăng Nhập</button>
+            </form>
+            <div class="divider">HOẶC</div>
+            <div class="social-login">
+                <a href="https://accounts.google.com/signin" target="_blank" class="google-btn">
+                    <i class="fab fa-google"></i> Google
+                </a> 
+                
+                <a href="https://www.facebook.com/login/" target="_blank" class="facebook-btn">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </a>
             </div>
+        </div>
 
-            <div id="register-panel" class="form-panel hidden">
-                <h3>Tạo tài khoản mới</h3>
-                <p>Đăng ký ngay.</p>
-                <form>
-                    <input type="text" placeholder="Họ và Tên" required>
-                    <input type="email" placeholder="Email" required>
-                    <div class="password-group">
-                        <input type="password" placeholder="Mật khẩu" id="register-password" required>
-                        <i class="fa-solid fa-eye-slash" onclick="togglePassword('register-password')"></i>
-                    </div>
-                    <label class="terms-checkbox">
-                        <input type="checkbox" required> Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a>
-                    </label>
-                    <button type="submit" class="register-btn">Đăng Ký Tài Khoản</button>
-                </form>
-                <div class="divider">HOẶC</div>
-                <div class="social-login">
-    <a href="https://accounts.google.com/signin" target="_blank" class="google-btn">
-        <i class="fab fa-google"></i> Google
-    </a> 
-    
-    <a href="https://www.facebook.com/login/" target="_blank" class="facebook-btn">
-        <i class="fab fa-facebook-f"></i> Facebook
-    </a>
-</div>
+        <div id="register-panel" class="form-panel hidden">
+            <h3>Tạo tài khoản mới</h3>
+            <p>Đăng ký ngay.</p>
+            <form id="register-form"> <input type="text" id="register-name" placeholder="Họ và Tên" required> <input type="phone" id="register-phone" placeholder="Số điện thoại" required>
+                <input type="email" id="register-email" placeholder="Email" required> <div class="password-group">
+                    <input type="password" placeholder="Mật khẩu" id="register-password-input" required> <i class="fa-solid fa-eye-slash" onclick="togglePassword('register-password-input')"></i>
+                </div>
+                <label class="terms-checkbox">
+                    <input type="checkbox" required> Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a>
+                </label>
+                <button type="submit" class="register-btn">Đăng Ký Tài Khoản</button>
+            </form>
+            <div class="divider">HOẶC</div>
+            <div class="social-login">
+                <a href="https://accounts.google.com/signin" target="_blank" class="google-btn">
+                    <i class="fab fa-google"></i> Google
+                </a> 
+                
+                <a href="https://www.facebook.com/login/" target="_blank" class="facebook-btn">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </a>
             </div>
         </div>
     </div>
+</div>
 <div id="checkout-modal" class="modal-overlay hidden" onclick="closeCheckoutModalOutside(event)">
         <div class="modal-content checkout-content">
             <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
@@ -360,7 +361,7 @@
                 <p>Tổng phụ: <span id="cart-subtotal">0 VNĐ</span></p>
                 <p>Phí vận chuyển: <span>Miễn phí</span></p>
                 <p class="total">Tổng cộng: <span id="cart-total">0 VNĐ</span></p>
-                <button class="primary-btn checkout-btn" onclick="openCheckoutModal()">Tiến Hành Thanh Toán</button>
+                <button class="primary-btn checkout-btn" onclick="openCheckoutModal()">Thanh Toán</button>
             </div>
         </div>
     </div>
@@ -371,12 +372,12 @@
     <script>
     const products = [
         // --- NHẪN (6 sản phẩm) ---
-        { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 425000, desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', image: '1.jpg', tag: 'Hot', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p5', name: 'Nhẫn Eternity Đính Đá CZ', category: 'nhan', price: 450000, desc: 'Thanh mảnh, vĩnh cửu, đeo xếp lớp.', image: '2.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p8', name: 'Nhẫn Nơ Xinh Đá Rơi', category: 'nhan', price: 650000, desc: 'Nơ độc đáo, chuyển động, rất nữ tính.', image: '3.jpg', tag: 'VIP', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p11', name: 'Nhẫn Nơ Đá Mini Dịu Dàng', category: 'nhan', price: 990000, desc: 'Nhỏ gọn, duyên dáng, phong cách trẻ trung.', image: '4.jpg', tag: 'Sale', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p13', name: 'Nhẫn Nơ Hồng Thạch Anh', category: 'nhan', price: 500000, desc: 'Đá hồng trái tim, ngọt ngào, thu hút ánh nhìn.', image: '5.jpg', tag: 'Luxury', sizes: ['S6', 'S7', 'S8', 'S9'] },
-        { id: 'p14', name: 'Nhẫn Cặp Kim Cương Trái Tim', category: 'nhan', price: 620000, desc: 'Tình yêu vĩnh cửu.', image: '6.jpg', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 425000, desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', image: '1.jpg', tag: 'Hot', sizes: ['14mm', '15mm', '16mm', '17mm'] },
+        { id: 'p5', name: 'Nhẫn Eternity Đính Đá CZ', category: 'nhan', price: 450000, desc: 'Thanh mảnh, vĩnh cửu, đeo xếp lớp.', image: '2.jpg', tag: '', sizes: ['14mm', '15mm', '16mm', '17mm'] },
+        { id: 'p8', name: 'Nhẫn Nơ Xinh Đá Rơi', category: 'nhan', price: 650000, desc: 'Nơ độc đáo, chuyển động, rất nữ tính.', image: '3.jpg', tag: 'VIP', sizes: ['14mm', '15mm', '16mm', '17mm'] },
+        { id: 'p11', name: 'Nhẫn Nơ Đá Mini Dịu Dàng', category: 'nhan', price: 990000, desc: 'Nhỏ gọn, duyên dáng, phong cách trẻ trung.', image: '4.jpg', tag: 'Sale', sizes: ['14mm', '15mm', '16mm', '17mm'] },
+        { id: 'p13', name: 'Nhẫn Nơ Hồng Thạch Anh', category: 'nhan', price: 500000, desc: 'Đá hồng trái tim, ngọt ngào, thu hút ánh nhìn.', image: '5.jpg', tag: 'Luxury', sizes: ['14mm', '15mm', '16mm', '17mm'] },
+        { id: 'p14', name: 'Nhẫn Cặp Kim Cương Trái Tim', category: 'nhan', price: 620000, desc: 'Tình yêu vĩnh cửu.', image: '6.jpg', tag: '', sizes: ['14mm', '15mm', '16mm', '17mm'] },
         
         // --- DÂY CHUYỀN (6 sản phẩm) ---
         { id: 'p2', name: 'Dây Chuyền Bạc Thanh Lịch', category: 'daychuyen', price: 890000, desc: 'Bạc S925, chuỗi hạt đá thả rơi, lấp lánh nhẹ nhàng.', image: 'vong1.jpg', tag: 'new', sizes: ['35cm', '40cm', '50cm']},
@@ -467,7 +468,237 @@
             toast.classList.add('hidden');
         }, 3000);
     };
+// =================================================================
+// 6. XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ VÀ SESSION PERSISTENCE
+// =================================================================
+const USER_STORAGE_KEY = 'dalad_users';
+const CURRENT_USER_KEY = 'dalad_current_user';
 
+// --- A. DATA & LOCALSTORAGE HANDLER ---
+const getUsers = () => {
+    const users = localStorage.getItem(USER_STORAGE_KEY);
+    return users ? JSON.parse(users) : [];
+};
+
+const saveUsers = (users) => {
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(users));
+};
+
+const getCurrentUser = () => {
+    const user = localStorage.getItem(CURRENT_USER_KEY);
+    return user ? JSON.parse(user) : null;
+};
+
+const setCurrentUser = (user) => {
+    if (user) {
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    } else {
+        localStorage.removeItem(CURRENT_USER_KEY);
+    }
+    updateAuthDisplay(); // Cập nhật giao diện ngay lập tức
+};
+
+
+// --- B. UI & MODAL HANDLER (Hỗ trợ cấu trúc tabbed modal của bạn) ---
+
+// Cập nhật hiển thị nút Đăng nhập/Tên tài khoản trên Header
+const updateAuthDisplay = () => {
+    const navItem = document.getElementById('auth-nav-item');
+    const currentUser = getCurrentUser();
+    
+    if (!navItem) return;
+
+    if (currentUser) {
+        // Đã đăng nhập: Hiển thị Tên người dùng và nút Đăng xuất
+        const displayName = currentUser.name || currentUser.email.split('@')[0];
+        navItem.innerHTML = `
+            <li class="nav-dropdown-item">
+                <a href="#" class="auth-link">
+                    <i class="fa-solid fa-user"></i> ${displayName}
+                    <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                </a>
+                <div class="dropdown-menu auth-dropdown-menu">
+                    <ul class="auth-list">
+                        <li class="dropdown-title">Tài Khoản</li>
+                        <li><a href="#purchase-history" onclick="showPurchaseHistory()">Lịch sử mua hàng</a></li>
+                        <li><a href="#" onclick="handleLogout(event)">Đăng Xuất</a></li>
+                    </ul>
+                </div>
+            </li>
+        `;
+    } else {
+        // Chưa đăng nhập: Hiển thị nút Đăng nhập
+        navItem.innerHTML = `
+            <a href="#" onclick="openAuthModal(false, event)" title="Tài Khoản">
+                <i class="fa-regular fa-user"></i> Đăng nhập
+            </a>
+        `;
+    }
+};
+
+// Hàm mở Modal Đăng nhập/Đăng ký (chuyển về tab Đăng nhập hoặc Đăng ký)
+const openAuthModal = (isRegisterMode, event) => {
+    if (event) event.preventDefault();
+    const modal = document.getElementById('auth-modal');
+    if (modal) {
+        // Reset form và hiển thị modal
+        document.getElementById('login-form').reset();
+        document.getElementById('register-form').reset();
+        modal.classList.remove('hidden');
+
+        // Chuyển panel
+        showPanel(isRegisterMode ? 'register' : 'login');
+    }
+};
+
+// Hàm đóng modal
+const closeModal = (id = 'auth-modal') => {
+    const modal = document.getElementById(id);
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+// Hàm hỗ trợ cho cấu trúc tabbed modal của bạn
+const showPanel = (panelId) => {
+    // Ẩn tất cả panels và bỏ active tất cả tabs
+    document.querySelectorAll('.form-panel').forEach(panel => panel.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+    // Hiển thị panel và active tab được chọn
+    document.getElementById(`${panelId}-panel`).classList.remove('hidden');
+    document.getElementById(`${panelId}-tab`).classList.add('active');
+};
+
+// Hàm hỗ trợ ẩn/hiện mật khẩu
+const togglePassword = (inputId) => {
+    const input = document.getElementById(inputId);
+    const icon = input.nextElementSibling; // Icon là element đứng sau input
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    } else {
+        input.type = "password";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    }
+};
+
+
+// --- C. AUTH LOGIC ---
+const handleRegister = (event) => {
+    event.preventDefault();
+    
+    const name = document.getElementById('register-name').value.trim();
+    const email = document.getElementById('register-email').value.trim();
+    const phone = document.getElementById('register-phone').value.trim(); // Dữ liệu phone
+    const password = document.getElementById('register-password-input').value.trim();
+    
+    let users = getUsers();
+    
+    if (users.some(user => user.email === email)) {
+        showToast('Email này đã được đăng ký!', 'error');
+        return false;
+    }
+
+    const newUser = {
+        id: Date.now(),
+        name: name,
+        email: email,
+        phone: phone, 
+        password: password, 
+    };
+    users.push(newUser);
+    saveUsers(users);
+
+    // Tự động đăng nhập sau khi đăng ký thành công
+    setCurrentUser(newUser);
+    showToast(`Đăng ký thành công! Chào mừng, ${name}.`, 'success');
+    closeModal('auth-modal');
+    return true;
+};
+
+// =================================================================
+// HÀM XỬ LÝ ĐĂNG NHẬP (handleLogin) - ĐÃ THÊM LOGIC ADMIN
+// =================================================================
+const handleLogin = (event) => {
+    event.preventDefault(); // Ngăn chặn form submit mặc định
+
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password-input').value.trim();
+
+    // 1. KIỂM TRA ĐĂNG NHẬP ADMIN (Logic mới)
+    // Nếu mật khẩu là '1235', chúng ta giả định đây là Admin và chuyển hướng
+    // Tôi khuyến nghị nên thêm điều kiện kiểm tra email (ví dụ: email === 'admin@dalad.com') để bảo mật hơn.
+    if (password === '1235') {
+        
+        // Tạo một đối tượng user giả cho Admin và lưu vào LocalStorage
+        const adminUser = { 
+            name: "Admin", 
+            email: "admin@dalad.com", 
+            isAdmin: true // Đánh dấu là Admin
+        };
+        
+        // Lưu trạng thái Admin
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(adminUser));
+        
+        showToast('Đăng nhập Admin thành công! Chuyển hướng...', 'success');
+        
+        // CHUYỂN HƯỚNG SANG TRANG ADMIN
+        window.location.href = 'admin.html'; 
+        return; // Dừng hàm, không thực hiện logic người dùng thường
+    }
+
+    // 2. LOGIC ĐĂNG NHẬP NGƯỜI DÙNG BÌNH THƯỜNG (Logic cũ)
+    const users = getUsers();
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (user) {
+        // Lưu trạng thái người dùng vào LocalStorage
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+        
+        closeModal('auth-modal');
+        updateAuthDisplay();
+        showToast(`Chào mừng ${user.name} đã quay trở lại!`, 'success');
+        // Có thể thêm lệnh chuyển hướng: window.location.reload(); 
+    } else {
+        showToast('Email hoặc Mật khẩu không đúng. Vui lòng thử lại.', 'error');
+    }
+};
+const handleLogout = (event) => {
+    if (event) event.preventDefault();
+    setCurrentUser(null);
+    showToast('Bạn đã đăng xuất thành công.', 'info');
+};
+
+// Gán sự kiện cho form
+const loginForm = document.getElementById('login-form');
+if (loginForm) {
+    loginForm.addEventListener('submit', handleLogin);
+}
+
+const registerForm = document.getElementById('register-form');
+if (registerForm) {
+    registerForm.addEventListener('submit', handleRegister);
+}
+
+
+// =================================================================
+// CẬP NHẬT INIT APP
+// =================================================================
+// **Đảm bảo bạn đã gọi updateAuthDisplay() trong hàm khởi tạo của mình**
+const initApp = () => {
+    // ... các hàm init khác của bạn ...
+    // updateCartDisplay(); 
+    
+    // KHỞI TẠO TRẠNG THÁI ĐĂNG NHẬP
+    updateAuthDisplay(); 
+};
+
+// Chạy hàm khởi tạo ngay khi nội dung trang được tải xong
+// window.addEventListener('DOMContentLoaded', initApp);
     // Hàm mở Cart Popup
     const openCartPopup = () => {
         if (cartPopup) {
@@ -494,7 +725,82 @@
             closeCartPopup();
         }
     };
+    // =================================================================
+// CHỨC NĂNG LỊCH SỬ MUA HÀNG (PURCHASE HISTORY)
+// =================================================================
+
+const PURCHASE_HISTORY_KEY = 'dalad_orders'; // KEY mới để lưu đơn hàng
+// Lưu ý: Cần đảm bảo hàm getCurrentUser() đã được định nghĩa.
+
+// 1. Hàm lấy tất cả đơn hàng
+const getAllOrders = () => {
+    const ordersJson = localStorage.getItem(PURCHASE_HISTORY_KEY);
+    return ordersJson ? JSON.parse(ordersJson) : [];
+};
+
+// 2. Hàm chuyển đổi view sang Lịch sử mua hàng
+const showPurchaseHistory = () => {
+    // Ẩn tất cả các section khác và hiển thị section 'purchase-history'
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+    document.getElementById('purchase-history').classList.remove('hidden');
     
+    renderCustomerOrders();
+};
+
+// 3. Hàm hiển thị đơn hàng của riêng khách hàng
+const renderCustomerOrders = () => {
+    const user = getCurrentUser();
+    const ordersContainer = document.getElementById('orders-list-customer');
+    ordersContainer.innerHTML = '';
+    
+    if (!user) {
+        ordersContainer.innerHTML = `<p class="no-orders-message">Vui lòng đăng nhập để xem lịch sử mua hàng.</p>`;
+        return;
+    }
+
+    const allOrders = getAllOrders();
+    // Lọc đơn hàng theo email của khách hàng đang đăng nhập
+    const customerOrders = allOrders.filter(order => order.email === user.email);
+    
+    if (customerOrders.length === 0) {
+        ordersContainer.innerHTML = `<p class="no-orders-message">Bạn chưa có đơn hàng nào.</p>`;
+        return;
+    }
+
+    let html = customerOrders.map(order => `
+        <div class="order-card">
+            <h4>Mã đơn hàng: #${order.id} - ${order.status}</h4>
+            <p><strong>Ngày đặt:</strong> ${order.date}</p>
+            <p><strong>Tổng tiền:</strong> ${order.total.toLocaleString('vi-VN')} VNĐ</p>
+            <p><strong>Trạng thái:</strong> <span class="order-status status-${order.status.replace(/\s/g, '-')}">${order.status}</span></p>
+            <div class="order-items-detail hidden" id="detail-${order.id}">
+                <h5>Chi tiết sản phẩm:</h5>
+                <ul>
+                    ${order.items.map(item => `
+                        <li>${item.name} (x${item.qty}) - ${item.price.toLocaleString('vi-VN')} VNĐ</li>
+                    `).join('')}
+                </ul>
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="document.getElementById('detail-${order.id}').classList.toggle('hidden')">
+                Xem chi tiết
+            </button>
+        </div>
+    `).join('');
+
+    ordersContainer.innerHTML = html;
+};
+
+// 4. CẬP NHẬT LOGIC ĐẶT HÀNG (Nếu bạn có form đặt hàng/thanh toán)
+// Cần đảm bảo rằng khi khách hàng đặt hàng thành công, đơn hàng mới được lưu vào LocalStorage
+// Dưới đây là ví dụ về cách lưu (Cần thay thế hàm đặt hàng thực tế của bạn)
+
+const saveOrder = (newOrder) => {
+    const orders = getAllOrders();
+    orders.push(newOrder);
+    localStorage.setItem(PURCHASE_HISTORY_KEY, JSON.stringify(orders));
+};
     // 3. LOGIC GIỎ HÀNG (CART LOGIC)
  
 
@@ -1121,9 +1427,7 @@ const generateOrderId = (orders) => {
         showPanel(panelName);
     };
 
-    const closeModal = () => {
-        if (authModal) authModal.classList.add('hidden');
-    };
+   
 
     const closeModalOutside = (event) => {
         if (event.target === authModal) {
@@ -1131,39 +1435,8 @@ const generateOrderId = (orders) => {
         }
     };
 
-    const showPanel = (panelName) => {
-        if (!loginPanel || !registerPanel || !loginTab || !registerTab) return;
-        
-        if (panelName === 'login') {
-            loginPanel.classList.remove('hidden');
-            registerPanel.classList.add('hidden');
-            loginTab.classList.add('active');
-            registerTab.classList.remove('active');
-        } else if (panelName === 'register') {
-            registerPanel.classList.remove('hidden');
-            loginPanel.classList.add('hidden');
-            registerTab.classList.add('active');
-            loginTab.classList.remove('active');
-        }
-    };
-
-    const togglePassword = (inputId) => {
-        const input = document.getElementById(inputId);
-        const icon = input?.nextElementSibling;
-
-        if (!input || !icon) return;
-
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        }
-    };
-
+   
+   
     
     const toggleSearchBar = () => {
         if (!searchBar) return;
