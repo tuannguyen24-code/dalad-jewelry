@@ -3,10 +3,13 @@
 // =================================================================
 const initialProducts = [
     // Thêm description và discount
-    { id: 1, name: "Nhẫn Bạc Hoa Tuyết", category: "nhan", description: "Nhẫn bạc S925 đính đá CZ hình hoa tuyết tinh xảo. Phù hợp cho dịp Giáng Sinh.", price: 550000, stock: 50, images: ['vong4.jpg'], discount: "Giảm 10%" },
+    { id: 1, name: "Nhẫn Bạc Hoa Tuyết", category: "nhan", description: "Nhẫn bạc S925 đính đá CZ hình hoa tuyết tinh xảo. Phù hợp cho dịp Giáng Sinh.", price: 550000, stock: 50, images: ['vong4.jpg'], discount: "" },
     { id: 2, name: "Dây Chuyền Trái Tim", category: "daychuyen", description: "Dây chuyền mặt trái tim lồng đôi, làm từ vàng trắng 14K. Món quà hoàn hảo cho người yêu.", price: 890000, stock: 35, images: ["vong5.jpg"], discount: "" },
     // Thêm một sản phẩm mới để mô phỏng data
-    { id: 3, name: "Vòng Tay Chuỗi Ngọc", category: "vongtay", description: "Vòng tay chuỗi ngọc trai nước ngọt, thanh lịch và quý phái.", price: 1200000, stock: 15, images: ["vong6.jpg"], discount: "Miễn phí hộp quà" },
+    { id: 3, name: "Vòng Tay Chuỗi Ngọc", category: "vongtay", description: "Vòng tay chuỗi ngọc trai nước ngọt, thanh lịch và quý phái.", price: 1200000, stock: 15, images: ["vong6.jpg"], discount: "" },
+ { id: 4, name: "Dây Chuyền Bạc Thanh Lịch", category: "daychuyen", description: "Bạc S925, chuỗi hạt đá thả rơi, lấp lánh nhẹ nhàng", price: 1200000, stock: 15, images: ["vong1.jpg"], discount: "" },
+  { id: 5, name: "Vòng Tay Bạc Tình Yêu Charm", category: "vongtay", description: "BVòng hạt/bi, mặt charm hình trái tim đính đá nhỏ, có móc nối.", price: 1200000, stock: 15, images: ["vong1.jpg"], discount: "" },
+
 ];
 
 const initialCategories = [
