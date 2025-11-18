@@ -16,7 +16,6 @@
                 <ul>
                     <li><a href="#home" class="active">Trang Chủ</a></li>
                    
-                    
                     <li class="nav-dropdown-item">
                         <a href="#products">
                             Cửa Hàng 
@@ -75,15 +74,15 @@
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="main-content" id="main-content">
         <section id="home" class="hero-section">
             <div class="hero-left">
                 <div class="image-wrapper" style="background-image: url('mau1.png');"></div>
             </div>
             <div class="hero-center">
                 <p>Khuyến Mãi Lớn</p>
-                <h1 class="sale-title">FREESHIP</h1>
-                <p>Mọi đơn hàng.</p>
+                <h1 class="sale-title">FLASH SALE! GIẢM 30%</h1>
+                <p>đối với đơn hàng trên 2 triệu.</p>
                 <a href="#products" class="primary-btn">Xem Ngay Cửa Hàng <i class="fa-solid fa-arrow-right"></i></a>
                 <div class="image-small-wrapper" style="background-image: url('mau3.png');"></div>
             </div>
@@ -103,7 +102,7 @@
             </div>
             <div class="stat-item">
                 <h2 class="counter" data-target="120">0</h2>
-                <p>Bộ Sưu Tập Độc Đáo</p>
+                <p>Bộ Sưu Tập</p>
             </div>
         </section>
 
@@ -173,8 +172,63 @@
                 </div>
             </div>
         </section>
+        
+        <section id="product-detail-page" class="product-detail-section" style="display: none;">
+            <button id="back-to-products" class="btn btn-primary-outline" onclick="backToProductList()"><i class="fas fa-arrow-left"></i> Quay lại Cửa Hàng</button>
+            
+            <div class="product-detail-container">
+                <div class="product-image-gallery">
+                    <img id="detail-main-image" src="" alt="Sản phẩm chi tiết" class="main-image">
+                </div>
+                
+                <div class="product-info">
+                    <h1 id="detail-name"></h1>
+                    <p class="detail-sku">Mã SP: <span id="detail-sku-value"></span></p>
+                    
+                    <div class="average-rating">
+                        <span class="rating-stars" id="avg-stars-current"></span>
+                        <span class="rating-value" id="avg-value-current">0.0</span>
+                        <span class="review-count" id="review-count-current">(0 đánh giá)</span>
+                    </div>
+                    
+                    <p class="detail-price" id="detail-price"></p>
+                    <p id="detail-description-full"></p>
+                    
+                    <button id="detail-add-to-cart-btn" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Thêm vào Giỏ</button>
+                </div>
+            </div>
+            
+           <div id="product-reviews-detail-container">
+    <h2>Đánh giá sản phẩm</h2>
 
-    </main>
+    <div id="reviews-list"></div>
+
+    <form id="review-form">
+        <h3>Viết đánh giá</h3>
+
+        <label>Họ tên</label>
+        <input type="text" id="reviewer-name" required>
+
+        <label>Đánh giá:</label>
+        <div id="review-rating-stars" class="rating-stars">
+            <i class="far fa-star" data-value="1"></i>
+            <i class="far fa-star" data-value="2"></i>
+            <i class="far fa-star" data-value="3"></i>
+            <i class="far fa-star" data-value="4"></i>
+            <i class="far fa-star" data-value="5"></i>
+        </div>
+        <input type="hidden" id="rating-input">
+
+        <label>Nhận xét</label>
+        <textarea id="review-comment" required></textarea>
+
+        <button type="submit">Gửi đánh giá</button>
+    </form>
+</div>
+
+            
+        </section>
+        </main>
     
     <footer class="main-footer">
         <div class="footer-container">
@@ -363,10 +417,22 @@
             </div>
         </div>
     </div>
+   <div id="product-detail-modal" class="modal-overlay hidden" onclick="closeDetailModalOutside(event)">
+    <div class="modal-content product-detail-content"> 
+        <button class="close-modal-btn" onclick="closeProductDetailModal()">×</button>
+    </div> 
+</div>
+
+
+<div id="success-toast" class="success-toast hidden">
+    <span id="toast-message">Thêm vào giỏ hàng thành công!</span>
+</div>
+        
 </body>
 </html>
 
     <script>
+        
     const products = [
         // --- NHẪN (6 sản phẩm) ---
         { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 425000, desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', image: '1.jpg', tag: 'Hot', sizes: ['14mm', '15mm', '16mm', '17mm'] },
@@ -429,7 +495,104 @@
     const formatCurrency = (amount) => {
          return amount.toLocaleString('vi-VN') + ' VNĐ'; 
     };
-    
+    // Lưu và lấy đánh giá từ localStorage
+const getReviews = () => JSON.parse(localStorage.getItem("reviews") || "[]");
+const saveReviews = (data) => localStorage.setItem("reviews", JSON.stringify(data));
+
+let currentProductId = null;
+
+// Render sao
+const renderStars = (rating) => {
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+        html += `<i class="${i <= rating ? "fas" : "far"} fa-star"></i>`;
+    }
+    return html;
+};
+
+// Hiển thị đánh giá của sản phẩm
+const displayReviews = () => {
+    const reviewsList = document.getElementById("reviews-list");
+    const allReviews = getReviews();
+    const productReviews = allReviews.filter(r => r.productId === currentProductId);
+
+    reviewsList.innerHTML = "";
+
+    if (productReviews.length === 0) {
+        reviewsList.innerHTML = "<p>Chưa có đánh giá nào.</p>";
+        return;
+    }
+
+    productReviews.forEach(review => {
+        const item = document.createElement("div");
+        item.className = "review-item";
+        item.innerHTML = `
+            <div class="review-header">
+                <strong>${review.name}</strong>
+                <span class="review-stars">${renderStars(review.rating)}</span>
+            </div>
+            <p class="review-comment">${review.comment}</p>
+            <div class="review-date">${review.date}</div>
+        `;
+        reviewsList.appendChild(item);
+    });
+};
+
+// Xử lý chọn sao
+const setupStarInteraction = () => {
+    const stars = document.querySelectorAll("#review-rating-stars i");
+    const ratingInput = document.getElementById("rating-input");
+
+    stars.forEach(star => {
+        star.addEventListener("mouseover", () => {
+            let r = star.dataset.value;
+            stars.forEach(s => s.className = Number(s.dataset.value) <= r ? "fas fa-star" : "far fa-star");
+        });
+
+        star.addEventListener("click", () => {
+            ratingInput.value = star.dataset.value;
+        });
+    });
+};
+
+// Submit đánh giá
+const handleReviewSubmit = (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById("reviewer-name").value;
+    const comment = document.getElementById("review-comment").value;
+    const rating = Number(document.getElementById("rating-input").value);
+
+    if (!rating) {
+        alert("Bạn phải chọn số sao!");
+        return;
+    }
+
+    const newReview = {
+        productId: currentProductId,
+        name,
+        comment,
+        rating,
+        date: new Date().toLocaleDateString("vi-VN"),
+    };
+
+    const allReviews = getReviews();
+    allReviews.push(newReview);
+    saveReviews(allReviews);
+
+    document.getElementById("review-form").reset();
+    displayReviews();
+    alert("Đánh giá thành công!");
+};
+
+// Gọi khi mở sản phẩm chi tiết
+function initReviewSection(productId) {
+    currentProductId = productId;
+    setupStarInteraction();
+    displayReviews();
+    document.getElementById("review-form").addEventListener("submit", handleReviewSubmit);
+}
+
     const getPriceRange = (price) => {
     // Giá trị 'price' cần được truyền vào dưới dạng số (ví dụ: 500000, 1500000).
     
@@ -911,7 +1074,11 @@ const generateOrderId = (orders) => {
             showToast('Giỏ hàng trống. Vui lòng thêm sản phẩm.', 'error');
             return;
         }
-        
+        const currentUser = localStorage.getItem(CURRENT_USER_KEY);
+        if (!currentUser) {
+            showToast('Vui lòng đăng nhập để thanh toán.', 'error');
+            return; 
+        }
         // 1. Đóng giỏ hàng nhỏ (
         closeCartPopup(); 
         
@@ -1028,7 +1195,20 @@ const generateOrderId = (orders) => {
 
    
     // 5. LOGIC HIỂN THỊ VÀ LỌC SẢN PHẨM
-  
+  window.filterProducts = () => {
+        const categoryFilter = document.getElementById('category-filter').value;
+        const sortBy = document.getElementById('sort-by').value;
+        
+        // 1. TÍNH TOÁN RATING và tạo mảng sản phẩm mới
+        let productsWithRatings = products.map(p => {
+            const { avgRating, count } = calculateAverageRating(p.id);
+            return {
+                ...p,
+                rating: avgRating,
+                reviewCount: count
+            };
+        });
+    };
     const renderProducts = (filteredProducts) => {
         const container = document.getElementById('product-grid');
         if (!container) return;
@@ -1068,15 +1248,17 @@ const generateOrderId = (orders) => {
             }
 
             card.innerHTML = `
-                ${tagHtml}
-                <div class="product-image" style="background-image: url('${product.image}');"></div>
-                <p class="product-name">${product.name}</p>
-                <p class="product-desc">${product.desc}</p>
-                ${sizeSelectHtml} <p class="product-price">${formatCurrency(product.price)}</p>
-                <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                </button>
-            `;
+    ${tagHtml}
+    <div class="product-image" style="background-image: url('${product.image}');" onclick="showProductDetail('${product.id}')"></div>
+    <p class="product-name" onclick="showProductDetail('${product.id}')">${product.name}</p>
+    <p class="product-desc">${product.desc}</p>
+    ${sizeSelectHtml}
+    <p class="product-price">${formatCurrency(product.price)}</p>
+    <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+    </button>
+`;
+
             container.appendChild(card);
         });
     };
@@ -1495,7 +1677,32 @@ const generateOrderId = (orders) => {
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', handleNewsletterSubmit);
     }
-    
+    function showProductDetail(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    // Ẩn danh sách sản phẩm
+    document.getElementById("products").style.display = "none";
+
+    // Hiện trang chi tiết
+    const detailPage = document.getElementById("product-detail-page");
+    detailPage.style.display = "block";
+
+    // Gán dữ liệu vào giao diện
+    document.getElementById("detail-main-image").src = product.image;
+    document.getElementById("detail-name").textContent = product.name;
+    document.getElementById("detail-price").textContent = formatCurrency(product.price);
+    document.getElementById("detail-description-full").textContent = product.desc;
+    document.getElementById("detail-sku-value").textContent = product.id;
+
+    // Gọi hệ thống đánh giá
+    initReviewSection(productId);
+}
+function backToProductList() {
+    document.getElementById("product-detail-page").style.display = "none";
+    document.getElementById("products").style.display = "block";
+}
+
 
 </script>
     

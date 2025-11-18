@@ -3,12 +3,12 @@
 // =================================================================
 const initialProducts = [
     // Thêm description và discount
-    { id: 1, name: "Nhẫn Bạc Hoa Tuyết", category: "nhan", description: "Nhẫn bạc S925 đính đá CZ hình hoa tuyết tinh xảo. Phù hợp cho dịp Giáng Sinh.", price: 550000, stock: 50, images: ['vong4.jpg'], discount: "" },
-    { id: 2, name: "Dây Chuyền Trái Tim", category: "daychuyen", description: "Dây chuyền mặt trái tim lồng đôi, làm từ vàng trắng 14K. Món quà hoàn hảo cho người yêu.", price: 890000, stock: 35, images: ["vong5.jpg"], discount: "" },
+    { id: 1, name: "Nhẫn Bạc Hoa Tuyết", category: "nhan", description: "Nhẫn bạc S925 đính đá CZ hình hoa tuyết tinh xảo. Phù hợp cho dịp Giáng Sinh.", price: 550000, stock: 50, images: ['vong4.jpg'], discount: "freeship" },
+    { id: 2, name: "Dây Chuyền Trái Tim", category: "daychuyen", description: "Dây chuyền mặt trái tim lồng đôi, làm từ vàng trắng 14K. Món quà hoàn hảo cho người yêu.", price: 890000, stock: 35, images: ["vong5.jpg"], discount: "freeship" },
     // Thêm một sản phẩm mới để mô phỏng data
-    { id: 3, name: "Vòng Tay Chuỗi Ngọc", category: "vongtay", description: "Vòng tay chuỗi ngọc trai nước ngọt, thanh lịch và quý phái.", price: 1200000, stock: 15, images: ["vong6.jpg"], discount: "" },
- { id: 4, name: "Dây Chuyền Bạc Thanh Lịch", category: "daychuyen", description: "Bạc S925, chuỗi hạt đá thả rơi, lấp lánh nhẹ nhàng", price: 1200000, stock: 15, images: ["vong1.jpg"], discount: "" },
-  { id: 5, name: "Vòng Tay Bạc Tình Yêu Charm", category: "vongtay", description: "BVòng hạt/bi, mặt charm hình trái tim đính đá nhỏ, có móc nối.", price: 1200000, stock: 15, images: ["vong1.jpg"], discount: "" },
+    { id: 3, name: "Vòng Tay Chuỗi Ngọc", category: "vongtay", description: "Vòng tay chuỗi ngọc trai nước ngọt, thanh lịch và quý phái.", price: 1200000, stock: 15, images: ["vong6.jpg"], discount: "freeship" },
+    { id: 4, name: "Dây Chuyền Bạc Thanh Lịch", category: "daychuyen", description: "Bạc S925, chuỗi hạt đá thả rơi, lấp lánh nhẹ nhàng", price: 1200000, stock: 15, images: ["vong1.jpg"], discount: "" },
+    { id: 5, name: "Vòng Tay Bạc Tình Yêu Charm", category: "vongtay", description: "BVòng hạt/bi, mặt charm hình trái tim đính đá nhỏ, có móc nối.", price: 1200000, stock: 15, images: ["vong1.jpg"], discount: "" },
 
 ];
 
@@ -42,6 +42,85 @@ function saveToLocalStorage(key, data) {
     if (key === 'adminProducts') {
         localStorage.setItem('dalad_products', JSON.stringify(data)); 
     }
+}
+// =================================================================
+// QUẢN LÝ ĐÁNH GIÁ SẢN PHẨM
+// =================================================================
+
+// Đọc danh sách review từ LocalStorage hoặc tạo 3 bình luận mẫu nếu chưa có
+let reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+
+if (reviews.length === 0) {
+    reviews = [
+        {
+            productId: 1,
+            name: "Nguyễn Thị Lan",
+            rating: 5,
+            comment: "Sản phẩm rất đẹp, sáng bóng và tinh xảo hơn mong đợi. Đóng gói sang trọng!",
+            images: [],
+            date: "2025-11-01T10:15:00"
+        },
+        {
+            productId: 2,
+            name: "Trần Đức Minh",
+            rating: 4,
+            comment: "Dây chuyền đeo đẹp, tuy nhiên giao hàng hơi lâu một chút, nhưng vẫn rất hài lòng.",
+            images: [],
+            date: "2025-11-06T14:05:00"
+        },
+        {
+            productId: 3,
+            name: "Phạm Hồng Phúc",
+            rating: 5,
+            comment: "Vòng tay ngọc trai tinh tế, rất phù hợp làm quà tặng. Vợ mình rất thích!",
+            images: [],
+            date: "2025-11-10T09:30:00"
+        }
+    ];
+    localStorage.setItem("reviews", JSON.stringify(reviews));
+}
+
+function renderReviewList() {
+    const tbody = document.getElementById("review-list");
+    tbody.innerHTML = "";
+
+    const pf = document.getElementById("review-product-filter").value;
+    const sf = document.getElementById("review-star-filter").value;
+
+    let filtered = [...reviews];
+
+    if (pf !== "all") filtered = filtered.filter(r => r.productId == pf);
+    if (sf !== "all") filtered = filtered.filter(r => r.rating == sf);
+
+    filtered.forEach((r, index) => {
+        const product = products.find(p => p.id == r.productId);
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${product ? product.name : "Không xác định"}</td>
+            <td>${r.name}</td>
+            <td>${"⭐".repeat(r.rating)}</td>
+            <td>${r.comment}</td>
+            <td>${r.date ? new Date(r.date).toLocaleDateString("vi-VN") : ""}</td>
+            <td>${r.images && r.images.length ? r.images.length + " ảnh" : "—"}</td>
+            <td><button class="delete-btn" onclick="deleteReview(${index})">Xóa</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function deleteReview(i) {
+    if (!confirm("Xóa đánh giá này?")) return;
+    reviews.splice(i, 1);
+    localStorage.setItem("reviews", JSON.stringify(reviews));
+    renderReviewList();
+}
+
+function loadReviewFilters() {
+    const sel = document.getElementById("review-product-filter");
+    sel.innerHTML = `<option value="all">Tất cả sản phẩm</option>` +
+        products.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
 }
 
 let products = getLocalStorageData('adminProducts', initialProducts);
@@ -99,6 +178,12 @@ const switchSection = (sectionId) => {
     if (sectionId === 'customers') renderCustomerList();
     if (sectionId === 'inventory') renderInventoryList(); 
     if (sectionId === 'dashboard') renderDashboardStats();
+    if (sectionId === 'reviews') {
+    reviews = JSON.parse(localStorage.getItem("reviews") || "[]");
+    loadReviewFilters();
+    renderReviewList();
+}
+
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -401,6 +486,29 @@ const updateInventory = (id) => {
         newStockEl.value = products[productIndex].stock; 
     }
 };
+function getReviewStats() {
+    if (!reviews || reviews.length === 0) {
+        return {
+            total: 0,
+            avg: 0,
+            dist: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+        };
+    }
+
+    const dist = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    let sum = 0;
+
+    reviews.forEach(r => {
+        dist[r.rating] = (dist[r.rating] || 0) + 1;
+        sum += r.rating;
+    });
+
+    return {
+        total: reviews.length,
+        avg: (sum / reviews.length).toFixed(2),
+        dist
+    };
+}
 
 // =================================================================
 // 7. THỐNG KÊ DOANH THU & BÁO CÁO
@@ -408,32 +516,36 @@ const updateInventory = (id) => {
 const renderDashboardStats = () => {
     const el = document.getElementById('stats-summary');
     el.innerHTML = '';
+
+    // ---- Doanh thu ----
     const successOrders = orders.filter(o => o.status === 'Đã giao');
     const totalRev = successOrders.reduce((s, o) => s + o.total, 0);
 
-    // Tính toán sản phẩm bán chạy (dựa trên số lượng bán được)
+    // ---- SP bán chạy ----
     const salesMap = new Map();
     successOrders.forEach(o => {
-        o.items.forEach(item => {
-            const currentQty = salesMap.get(item.name) || 0;
-            salesMap.set(item.name, currentQty + item.qty);
+        o.items.forEach(it => {
+            salesMap.set(it.name, (salesMap.get(it.name) || 0) + it.qty);
         });
     });
 
-    let bestSeller = { name: "N/A", qty: 0 };
+    let bestSeller = { name: "Chưa có", qty: 0 };
     salesMap.forEach((qty, name) => {
-        if (qty > bestSeller.qty) {
-            bestSeller = { name, qty };
-        }
+        if (qty > bestSeller.qty) bestSeller = { name, qty };
     });
+
+    // ---- Thống kê đánh giá ----
+    const rev = getReviewStats();
 
     const stats = [
         { title: 'Tổng Doanh Thu Đã Giao', value: `${totalRev.toLocaleString('vi-VN')} VNĐ` },
         { title: 'Tổng Đơn Hàng', value: orders.length },
         { title: 'Số Sản Phẩm', value: products.length },
         { title: 'Sản Phẩm Bán Chạy', value: `${bestSeller.name} (${bestSeller.qty} SP)` },
+        { title: '📊 Tổng Đánh Giá', value: rev.total },
+        { title: '⭐ Điểm Trung Bình', value: rev.avg }
     ];
-    
+
     stats.forEach(s => {
         const card = document.createElement('div');
         card.className = 'stat-card';
@@ -441,6 +553,50 @@ const renderDashboardStats = () => {
         el.appendChild(card);
     });
 };
+
+
+function renderReviewList() {
+    const tbody = document.getElementById("review-list");
+    tbody.innerHTML = "";
+
+    const pf = document.getElementById("review-product-filter").value;
+    const sf = document.getElementById("review-star-filter").value;
+
+    let filtered = [...reviews];
+
+    if (pf !== "all") filtered = filtered.filter(r => r.productId == pf);
+    if (sf !== "all") filtered = filtered.filter(r => r.rating == sf);
+
+    filtered.forEach((r, index) => {
+        const product = products.find(p => p.id == r.productId);
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${product ? product.name : "Không xác định"}</td>
+            <td>${r.name}</td>
+            <td>${"⭐".repeat(r.rating)}</td>
+            <td>${r.comment}</td>
+            <td>${r.date ? new Date(r.date).toLocaleDateString("vi-VN") : ""}</td>
+            <td>${r.images && r.images.length ? r.images.length + " ảnh" : "—"}</td>
+            <td><button class="delete-btn" onclick="deleteReview(${index})">Xóa</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+function deleteReview(i) {
+    if (!confirm("Xóa đánh giá này?")) return;
+    reviews.splice(i, 1);
+    localStorage.setItem("reviews", JSON.stringify(reviews));
+    renderReviewList();
+}
+
+function loadReviewFilters() {
+    const sel = document.getElementById("review-product-filter");
+    sel.innerHTML = `<option value="all">Tất cả sản phẩm</option>` +
+        products.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
+}
 
 // =================================================================
 // 8. HÀM TIỆN ÍCH KHÁC

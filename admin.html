@@ -126,6 +126,8 @@
                 <li><a href="#" class="nav-link" data-section="orders"><i class="fa-solid fa-receipt"></i> Quản Lý Đơn Hàng</a></li>
                 <li><a href="#" class="nav-link" data-section="customers"><i class="fa-solid fa-users"></i> Quản Lý Khách Hàng</a></li>
                 <li><a href="#" class="nav-link" data-section="inventory"><i class="fa-solid fa-warehouse"></i> Quản Lý Kho Hàng</a></li>
+                <li><a href="#" class="nav-link" data-section="reviews"><i class="fa-solid fa-comments"></i> Đánh Giá & Bình Luận</a></li>
+
                 <li><a href="index.html" target="_blank"><i class="fa-solid fa-store"></i> Xem Cửa Hàng</a></li>
             </ul>
         </aside>
@@ -229,6 +231,38 @@
                         </tbody>
                 </table>
             </section>
+<section id="reviews" class="content-section">
+    <h3><i class="fa-solid fa-comments"></i> Quản Lý Đánh Giá và Bình Luận Sản Phẩm</h3>
+
+    <label>Lọc theo sản phẩm:</label>
+    <select id="review-product-filter" style="padding:8px; margin-bottom:15px;"></select>
+
+    <label>Lọc theo số sao:</label>
+    <select id="review-star-filter" style="padding:8px; margin-bottom:15px;">
+        <option value="all">Tất cả</option>
+        <option value="5">5 Sao</option>
+        <option value="4">4 Sao</option>
+        <option value="3">3 Sao</option>
+        <option value="2">2 Sao</option>
+        <option value="1">1 Sao</option>
+    </select>
+
+    <table id="review-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sản phẩm</th>
+                <th>Tên KH</th>
+                <th>Số sao</th>
+                <th>Bình luận</th>
+                <th>Ngày</th>
+                <th>Ảnh</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="review-list"></tbody>
+    </table>
+</section>
 
         </main>
     </div>
