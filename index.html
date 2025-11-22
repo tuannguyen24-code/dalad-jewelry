@@ -752,7 +752,6 @@ const handleRegister = (event) => {
     
     const name = document.getElementById('register-name').value.trim();
     const email = document.getElementById('register-email').value.trim();
-    const phone = document.getElementById('register-phone').value.trim(); // Dữ liệu phone
     const password = document.getElementById('register-password-input').value.trim();
     
     let users = getUsers();
@@ -766,7 +765,6 @@ const handleRegister = (event) => {
         id: Date.now(),
         name: name,
         email: email,
-        phone: phone, 
         password: password, 
     };
     users.push(newUser);
@@ -1248,17 +1246,15 @@ const generateOrderId = (orders) => {
             }
 
             card.innerHTML = `
-    ${tagHtml}
-    <div class="product-image" style="background-image: url('${product.image}');" onclick="showProductDetail('${product.id}')"></div>
-    <p class="product-name" onclick="showProductDetail('${product.id}')">${product.name}</p>
-    <p class="product-desc">${product.desc}</p>
-    ${sizeSelectHtml}
-    <p class="product-price">${formatCurrency(product.price)}</p>
-    <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-    </button>
-`;
-
+                ${tagHtml}
+               <div class="product-image" style="background-image: url('${product.image}');" onclick="showProductDetail('${product.id}')"></div>
+               <p class="product-name" onclick="showProductDetail('${product.id}')">${product.name}</p
+                <p class="product-desc">${product.desc}</p>
+                ${sizeSelectHtml} <p class="product-price">${formatCurrency(product.price)}</p>
+                <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                </button>
+            `;
             container.appendChild(card);
         });
     };
@@ -1705,6 +1701,61 @@ function backToProductList() {
 
 
 </script>
-    
+  <script>
+// ====== MỞ MODAL ======
+function openModal() {
+    document.getElementById("auth-modal").classList.remove("hidden");
+}
+
+// ====== ĐÓNG MODAL ======
+function closeModal() {
+    document.getElementById("auth-modal").classList.add("hidden");
+}
+
+// ====== ĐÓNG MODAL KHI BẤM RA NGOÀI ======
+function closeModalOutside(event) {
+    if (event.target.classList.contains("modal-overlay")) {
+        closeModal();
+    }
+}
+
+
+// ====== CHECKOUT MODAL ======
+function openCheckoutModal() {
+    document.getElementById("checkout-modal").classList.remove("hidden");
+}
+
+function closeCheckoutModal() {
+    document.getElementById("checkout-modal").classList.add("hidden");
+}
+
+function closeCheckoutModalOutside(event) {
+    if (event.target.classList.contains("modal-overlay")) {
+        closeCheckoutModal();
+    }
+}
+
+
+// ====== SWITCH LOGIN / REGISTER TAB ======
+function showPanel(panel) {
+    const loginPanel = document.getElementById("login-panel");
+    const registerPanel = document.getElementById("register-panel");
+    const loginTab = document.getElementById("login-tab");
+    const registerTab = document.getElementById("register-tab");
+
+    if (panel === "login") {
+        loginPanel.classList.remove("hidden");
+        registerPanel.classList.add("hidden");
+        loginTab.classList.add("active");
+        registerTab.classList.remove("active");
+    } else {
+        loginPanel.classList.add("hidden");
+        registerPanel.classList.remove("hidden");
+        loginTab.classList.remove("active");
+        registerTab.classList.add("active");
+    }
+}
+</script>
+  
 </body>
 </html>

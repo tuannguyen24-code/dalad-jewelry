@@ -319,6 +319,8 @@ h2 {
     padding: 50px;
     text-align: center;
     gap: 15px;
+     position: relative;
+    z-index: 2;
 }
 
 .hero-center p:first-child {
@@ -382,11 +384,11 @@ h2 {
     max-width: 1000px;
     display: flex;
     justify-content: space-around;
-    padding: 30px 20px;
-    margin-top: -60px; /* Overlap with hero */
-    margin-bottom: 60px;
+    padding: 60px 50px;
+    margin-top: -70px; /* Overlap with hero */
+    margin-bottom: 80px;
     background-color: var(--white);
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: var(--shadow-medium);
 }
 
