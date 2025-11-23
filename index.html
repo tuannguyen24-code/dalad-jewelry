@@ -80,12 +80,10 @@
                 <div class="image-wrapper" style="background-image: url('mau1.png');"></div>
             </div>
             <div class="hero-center">
-                <p>Khuyến Mãi Lớn</p>
-                <h1 class="sale-title">FLASH SALE! GIẢM 30%</h1>
-                <p>đối với đơn hàng trên 2 triệu.</p>
+                <h1>CHRISTMAS SALE </h1>
+                <h2 class="sale-title">SALE UP TO 30%</h2>
                 <a href="#products" class="primary-btn">Xem Ngay Cửa Hàng <i class="fa-solid fa-arrow-right"></i></a>
-                <div class="image-small-wrapper" style="background-image: url('mau3.png');"></div>
-            </div>
+                
             <div class="hero-right">
                 <div class="image-wrapper" style="background-image: url('mau2.png');"></div>
             </div>
@@ -354,6 +352,7 @@
             <div class="checkout-container">
                 
                 <div class="shipping-info">
+                    
     <h3>Thông Tin Khách Hàng</h3>
      <form id="checkout-form">
         <label for="checkout-name">Họ và tên:</label>
@@ -367,6 +366,41 @@
 
         <label for="checkout-address">Địa chỉ:</label>
         <input type="text" id="checkout-address" required>
+<!-- Đoạn mã thêm phần khuyến mãi vào phần thanh toán -->
+<!-- Thêm ngay dưới phần phương thức thanh toán trong checkout-modal -->
+
+<label for="checkout-promo" style="margin-top:15px; font-weight:600; display:block;">Mã Khuyến Mãi:</label>
+<div style="display:flex; gap:10px; margin-bottom:15px;">
+    <input type="text" id="checkout-promo" placeholder="Nhập mã giảm giá" style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
+    <button type="button" onclick="applyPromoCode()" style="padding:10px 15px; background:#6780a3; color:white; border:none; border-radius:5px; cursor:pointer;">Áp dụng</button>
+</div>
+<p id="promo-message" style="color:#e74c3c; font-size:0.9rem; margin-top:-10px;"></p>
+
+<script>
+function applyPromoCode() {
+    const code = document.getElementById('checkout-promo').value.trim().toUpperCase();
+    const promoMessage = document.getElementById('promo-message');
+
+    let discount = 0;
+
+    if (code === 'SALE10') discount = 0.10;
+    else if (code === 'XMAS30') discount = 0.30;
+    else if (code === 'DALAD5') discount = 0.05;
+
+    if (discount > 0) {
+        const subtotalText = document.getElementById('summary-subtotal').innerText.replace(/\D/g, '');
+        const subtotal = Number(subtotalText);
+        const newTotal = subtotal - subtotal * discount;
+
+        document.getElementById('summary-total').innerText = newTotal.toLocaleString('vi-VN') + ' VNĐ';
+        promoMessage.style.color = '#27ae60';
+        promoMessage.innerText = `Áp dụng thành công! Giảm ${(discount * 100)}%`;    
+    } else {
+        promoMessage.style.color = '#e74c3c';
+        promoMessage.innerText = 'Mã giảm giá không hợp lệ!';
+    }
+}
+</script>
 
         <p>Phương thức thanh toán:</p>
         <label><input type="radio" name="payment" value="cod" checked> Thanh toán khi nhận hàng</label><br>
@@ -378,6 +412,7 @@
         </div>
       </form>
 </div>
+
                 <div class="order-summary">
                     <h3>Tóm Tắt Đơn Hàng</h3>
                     <div id="checkout-summary-list" class="summary-items-list">
