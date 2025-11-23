@@ -2381,67 +2381,7 @@ h2 {
     background: var(--accent-color);
     transform: translateY(-2px);
 }
-            .hero-left,
-.hero-right {
-    display: none !important;
-}
 
-/* HERO FULL WIDTH */
-.hero-section {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    height: 600px; /* chiều cao banner */
-    position: relative;
-    overflow: hidden;
-}
-
-/* HERO CENTER THÀNH BANNER */
-.hero-center {
-    position: relative;
-    width: 100%;
-    max-width: 100%;
-    padding-top: 120px;  /* đẩy chữ xuống cho đẹp */
-    text-align: center;
-    z-index: 5;
-}
-.hero-center h2,
-.hero-center h1 {
-    color: rgba(255, 71, 71, 0.9);
-    text-align: center;
-    z-index: 5;
-}
-/* ẢNH NỀN GIÁNG SINH FULL 2 BÊN */
-.hero-center::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("giangsinh.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.30;
-    z-index: -1;
-}
-
-/* ẢNH MẪU 3 TO NHƯ PHIÊN BẢN ĐẦU */
-.image-small-wrapper {
-    width: 380px;       /* to hơn – giống bản đầu tiên bạn có */
-    height: 240px;
-    margin: 40px auto 0 auto;
-
-    background-size: cover;
-    background-position: center;
-
-    border: 6px solid white;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.18);
-
-    position: relative;
-    z-index: 10;   /* đảm bảo không bị che */
-}
 /* === FIX PROMO CODE LAYOUT === */
 .promo-wrapper {
     margin-top: 15px;
