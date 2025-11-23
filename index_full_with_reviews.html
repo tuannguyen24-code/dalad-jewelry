@@ -198,34 +198,8 @@
                 </div>
             </div>
             
-           <div id="product-reviews-detail-container">
-    <h2>Đánh giá sản phẩm</h2>
-
-    <div id="reviews-list"></div>
-
-    <form id="review-form">
-        <h3>Viết đánh giá</h3>
-
-        <label>Họ tên</label>
-        <input type="text" id="reviewer-name" required>
-
-        <label>Đánh giá:</label>
-        <div id="review-rating-stars" class="rating-stars">
-            <i class="far fa-star" data-value="1"></i>
-            <i class="far fa-star" data-value="2"></i>
-            <i class="far fa-star" data-value="3"></i>
-            <i class="far fa-star" data-value="4"></i>
-            <i class="far fa-star" data-value="5"></i>
-        </div>
-        <input type="hidden" id="rating-input">
-
-        <label>Nhận xét</label>
-        <textarea id="review-comment" required></textarea>
-
-        <button type="submit">Gửi đánh giá</button>
-    </form>
-</div>
-
+            <div id="product-reviews-detail-container">
+                </div>
             
         </section>
         </main>
@@ -354,10 +328,6 @@
             <div class="checkout-container">
                 
                 <div class="shipping-info">
-                    <!-- Đoạn mã thêm phần khuyến mãi vào phần thanh toán -->
-<!-- Thêm ngay dưới phần phương thức thanh toán trong checkout-modal -->
-
-
     <h3>Thông Tin Khách Hàng</h3>
      <form id="checkout-form">
         <label for="checkout-name">Họ và tên:</label>
@@ -371,38 +341,6 @@
 
         <label for="checkout-address">Địa chỉ:</label>
         <input type="text" id="checkout-address" required>
-        <label for="checkout-promo" style="margin-top:15px; font-weight:600; display:block;">Mã Khuyến Mãi:</label>
-<div style="display:flex; gap:10px; margin-bottom:15px;">
-    <input type="text" id="checkout-promo" placeholder="Nhập mã giảm giá" style="flex:1; padding:10px; border:1px solid #ddd; border-radius:5px;">
-    <button type="button" onclick="applyPromoCode()" style="padding:10px 15px; background:#6780a3; color:white; border:none; border-radius:5px; cursor:pointer;">Áp dụng</button>
-</div>
-<p id="promo-message" style="color:#e74c3c; font-size:0.9rem; margin-top:-10px;"></p>
-
-<script>
-function applyPromoCode() {
-    const code = document.getElementById('checkout-promo').value.trim().toUpperCase();
-    const promoMessage = document.getElementById('promo-message');
-
-    let discount = 0;
-
-    if (code === 'SALE10') discount = 0.10;
-    else if (code === 'XMAS30') discount = 0.30;
-    else if (code === 'DALAD5') discount = 0.05;
-
-    if (discount > 0) {
-        const subtotalText = document.getElementById('summary-subtotal').innerText.replace(/\D/g, '');
-        const subtotal = Number(subtotalText);
-        const newTotal = subtotal - subtotal * discount;
-
-        document.getElementById('summary-total').innerText = newTotal.toLocaleString('vi-VN') + ' VNĐ';
-        promoMessage.style.color = '#27ae60';
-        promoMessage.innerText = `Áp dụng thành công! Giảm ${(discount * 100)}%`;    
-    } else {
-        promoMessage.style.color = '#e74c3c';
-        promoMessage.innerText = 'Mã giảm giá không hợp lệ!';
-    }
-}
-</script>
 
         <p>Phương thức thanh toán:</p>
         <label><input type="radio" name="payment" value="cod" checked> Thanh toán khi nhận hàng</label><br>
@@ -468,7 +406,6 @@ function applyPromoCode() {
 </html>
 
     <script>
-        
     const products = [
         // --- NHẪN (6 sản phẩm) ---
         { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 425000, desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', image: '1.jpg', tag: 'Hot', sizes: ['14mm', '15mm', '16mm', '17mm'] },
@@ -531,104 +468,7 @@ function applyPromoCode() {
     const formatCurrency = (amount) => {
          return amount.toLocaleString('vi-VN') + ' VNĐ'; 
     };
-    // Lưu và lấy đánh giá từ localStorage
-const getReviews = () => JSON.parse(localStorage.getItem("reviews") || "[]");
-const saveReviews = (data) => localStorage.setItem("reviews", JSON.stringify(data));
-
-let currentProductId = null;
-
-// Render sao
-const renderStars = (rating) => {
-    let html = "";
-    for (let i = 1; i <= 5; i++) {
-        html += `<i class="${i <= rating ? "fas" : "far"} fa-star"></i>`;
-    }
-    return html;
-};
-
-// Hiển thị đánh giá của sản phẩm
-const displayReviews = () => {
-    const reviewsList = document.getElementById("reviews-list");
-    const allReviews = getReviews();
-    const productReviews = allReviews.filter(r => r.productId === currentProductId);
-
-    reviewsList.innerHTML = "";
-
-    if (productReviews.length === 0) {
-        reviewsList.innerHTML = "<p>Chưa có đánh giá nào.</p>";
-        return;
-    }
-
-    productReviews.forEach(review => {
-        const item = document.createElement("div");
-        item.className = "review-item";
-        item.innerHTML = `
-            <div class="review-header">
-                <strong>${review.name}</strong>
-                <span class="review-stars">${renderStars(review.rating)}</span>
-            </div>
-            <p class="review-comment">${review.comment}</p>
-            <div class="review-date">${review.date}</div>
-        `;
-        reviewsList.appendChild(item);
-    });
-};
-
-// Xử lý chọn sao
-const setupStarInteraction = () => {
-    const stars = document.querySelectorAll("#review-rating-stars i");
-    const ratingInput = document.getElementById("rating-input");
-
-    stars.forEach(star => {
-        star.addEventListener("mouseover", () => {
-            let r = star.dataset.value;
-            stars.forEach(s => s.className = Number(s.dataset.value) <= r ? "fas fa-star" : "far fa-star");
-        });
-
-        star.addEventListener("click", () => {
-            ratingInput.value = star.dataset.value;
-        });
-    });
-};
-
-// Submit đánh giá
-const handleReviewSubmit = (event) => {
-    event.preventDefault();
-
-    const name = document.getElementById("reviewer-name").value;
-    const comment = document.getElementById("review-comment").value;
-    const rating = Number(document.getElementById("rating-input").value);
-
-    if (!rating) {
-        alert("Bạn phải chọn số sao!");
-        return;
-    }
-
-    const newReview = {
-        productId: currentProductId,
-        name,
-        comment,
-        rating,
-        date: new Date().toLocaleDateString("vi-VN"),
-    };
-
-    const allReviews = getReviews();
-    allReviews.push(newReview);
-    saveReviews(allReviews);
-
-    document.getElementById("review-form").reset();
-    displayReviews();
-    alert("Đánh giá thành công!");
-};
-
-// Gọi khi mở sản phẩm chi tiết
-function initReviewSection(productId) {
-    currentProductId = productId;
-    setupStarInteraction();
-    displayReviews();
-    document.getElementById("review-form").addEventListener("submit", handleReviewSubmit);
-}
-
+    
     const getPriceRange = (price) => {
     // Giá trị 'price' cần được truyền vào dưới dạng số (ví dụ: 500000, 1500000).
     
@@ -663,6 +503,223 @@ function initReviewSection(productId) {
         setTimeout(() => {
             toast.classList.add('hidden');
         }, 3000);
+    };
+    let currentProductId = null;
+    const REVIEW_STORAGE_KEY = 'dalad_product_reviews';
+    const mainContent = document.getElementById('main-content');
+    const detailPage = document.getElementById('product-detail-page');
+
+    // Hàm lấy/lưu đánh giá từ LocalStorage
+    const getReviews = () => {
+        const reviews = localStorage.getItem(REVIEW_STORAGE_KEY);
+        return reviews ? JSON.parse(reviews) : [];
+    };
+    const saveReviews = (reviews) => {
+        localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify(reviews));
+    };
+
+    // Hàm tạo HTML cho sao
+    const renderStars = (rating) => {
+        let starsHtml = '';
+        const roundedRating = Math.round(rating * 2) / 2;
+        const fullStars = Math.floor(roundedRating);
+        const hasHalfStar = roundedRating % 1 !== 0;
+
+        for (let i = 1; i <= 5; i++) {
+            if (i <= fullStars) {
+                starsHtml += '<i class="fas fa-star"></i>'; 
+            } else if (i === fullStars + 1 && hasHalfStar) {
+                starsHtml += '<i class="fas fa-star-half-alt"></i>'; 
+            } else {
+                starsHtml += '<i class="far fa-star"></i>'; 
+            }
+        }
+        return starsHtml;
+    };
+
+    // Hàm tạo HTML cấu trúc phần đánh giá (Form và List)
+    const renderReviewSection = () => {
+        const container = document.getElementById('product-reviews-detail-container');
+        if (!container) return;
+        
+        container.innerHTML = `
+            <section id="product-reviews" class="product-reviews-section">
+                <h2>🌟 Đánh Giá Sản Phẩm</h2>
+                
+                <div class="review-form-container">
+                    <h3>Gửi đánh giá của bạn</h3>
+                    <form id="review-form">
+                        <div class="form-group">
+                            <label>Chất lượng sản phẩm:</label>
+                            <div id="review-rating-stars" class="rating-stars interactive-stars" data-current-rating="0">
+                                <i class="far fa-star" data-value="1"></i>
+                                <i class="far fa-star" data-value="2"></i>
+                                <i class="far fa-star" data-value="3"></i>
+                                <i class="far fa-star" data-value="4"></i>
+                                <i class="far fa-star" data-value="5"></i>
+                            </div>
+                            <input type="hidden" id="rating-input" name="rating" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reviewer-name">Tên:</label>
+                            <input type="text" id="reviewer-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="review-comment">Nhận xét:</label>
+                            <textarea id="review-comment" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Gửi Đánh Giá</button>
+                    </form>
+                </div>
+
+                <hr>
+                
+                <h3>Các đánh giá khác</h3>
+                <div id="reviews-list" class="reviews-list">
+                    </div>
+            </section>
+        `;
+        
+        // Gán lại sự kiện
+        setupStarInteraction();
+        document.getElementById('review-form').addEventListener('submit', handleReviewSubmit);
+    };
+
+    // Hàm hiển thị danh sách đánh giá và tóm tắt
+    const displayReviews = () => {
+        if (!currentProductId) return;
+        
+        const allReviews = getReviews();
+        const productReviews = allReviews.filter(review => review.productId === currentProductId);
+        
+        const reviewsList = document.getElementById('reviews-list');
+        if (!reviewsList) return;
+
+        reviewsList.innerHTML = ''; 
+
+        // Tính toán và cập nhật tóm tắt đánh giá
+        if (productReviews.length === 0) {
+            document.getElementById('avg-stars-current').innerHTML = renderStars(0);
+            document.getElementById('avg-value-current').textContent = '0.0';
+            document.getElementById('review-count-current').textContent = '(0 đánh giá)';
+            reviewsList.innerHTML = '<p>Chưa có đánh giá nào. Hãy là người đầu tiên!</p>';
+        } else {
+            const totalRating = productReviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = (totalRating / productReviews.length).toFixed(1);
+            
+            document.getElementById('avg-stars-current').innerHTML = renderStars(parseFloat(averageRating));
+            document.getElementById('avg-value-current').textContent = averageRating;
+            document.getElementById('review-count-current').textContent = `(${productReviews.length} đánh giá)`;
+
+            productReviews.forEach(review => {
+                const reviewItem = document.createElement('div');
+                reviewItem.classList.add('review-item');
+
+                reviewItem.innerHTML = `
+                    <div class="review-header">
+                        <span class="reviewer-name">${review.name}</span>
+                        <span class="review-date">${review.date}</span>
+                    </div>
+                    <div class="review-body">
+                        <div class="rating-stars">${renderStars(review.rating)}</div>
+                        <p class="review-comment">${review.comment}</p>
+                    </div>
+                `;
+                reviewsList.appendChild(reviewItem);
+            });
+        }
+    };
+
+    // Hàm xử lý gửi form đánh giá
+    const handleReviewSubmit = (event) => {
+        event.preventDefault();
+        
+        const productId = currentProductId;
+        if (!productId) return; 
+
+        const name = document.getElementById('reviewer-name').value.trim();
+        const comment = document.getElementById('review-comment').value.trim();
+        const ratingElement = document.getElementById('rating-input');
+        const rating = parseInt(ratingElement.value, 10);
+
+        if (name === "" || comment === "" || rating === 0 || isNaN(rating)) {
+            alert("Vui lòng điền đủ thông tin.");
+            return;
+        }
+
+        const newReview = {
+            productId: productId,
+            id: Date.now(),
+            name: name,
+            comment: comment,
+            rating: rating,
+            date: new Date().toLocaleDateString('vi-VN')
+        };
+
+        const allReviews = getReviews();
+        allReviews.push(newReview);
+        saveReviews(allReviews);
+        
+        showToast(`Cảm ơn ${name} đã gửi đánh giá!`, 'success');
+        
+        // Reset form
+        document.getElementById('review-form').reset();
+        document.getElementById('review-rating-stars').dataset.currentRating = 0;
+        ratingElement.value = 0;
+        document.querySelectorAll('#review-rating-stars i').forEach(star => {
+            star.classList.remove('fas');
+            star.classList.add('far');
+        });
+
+        displayReviews();
+    };
+
+    // Logic tương tác cho sao đánh giá (hover/click)
+    const setupStarInteraction = () => {
+        const starContainer = document.getElementById('review-rating-stars');
+        const ratingInput = document.getElementById('rating-input');
+        
+        if (!starContainer) return;
+        const stars = starContainer.querySelectorAll('i');
+
+        stars.forEach(star => {
+            const value = parseInt(star.dataset.value, 10);
+
+            star.addEventListener('mouseover', () => {
+                stars.forEach(s => {
+                    const sValue = parseInt(s.dataset.value, 10);
+                    if (sValue <= value) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+
+            star.addEventListener('click', () => {
+                ratingInput.value = value;
+                starContainer.dataset.currentRating = value;
+            });
+        });
+
+        starContainer.addEventListener('mouseout', () => {
+            const currentRating = parseInt(starContainer.dataset.currentRating, 10);
+            stars.forEach(s => {
+                const sValue = parseInt(s.dataset.value, 10);
+                if (sValue <= currentRating) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                }
+            });
+        });
     };
 // =================================================================
 // 6. XỬ LÝ ĐĂNG NHẬP / ĐĂNG KÝ VÀ SESSION PERSISTENCE
@@ -788,6 +845,7 @@ const handleRegister = (event) => {
     
     const name = document.getElementById('register-name').value.trim();
     const email = document.getElementById('register-email').value.trim();
+    const phone = document.getElementById('register-phone').value.trim(); // Dữ liệu phone
     const password = document.getElementById('register-password-input').value.trim();
     
     let users = getUsers();
@@ -801,6 +859,7 @@ const handleRegister = (event) => {
         id: Date.now(),
         name: name,
         email: email,
+        phone: phone, 
         password: password, 
     };
     users.push(newUser);
@@ -1283,8 +1342,8 @@ const generateOrderId = (orders) => {
 
             card.innerHTML = `
                 ${tagHtml}
-               <div class="product-image" style="background-image: url('${product.image}');" onclick="showProductDetail('${product.id}')"></div>
-               <p class="product-name" onclick="showProductDetail('${product.id}')">${product.name}</p
+                <div class="product-image" style="background-image: url('${product.image}');"></div>
+                <p class="product-name">${product.name}</p>
                 <p class="product-desc">${product.desc}</p>
                 ${sizeSelectHtml} <p class="product-price">${formatCurrency(product.price)}</p>
                 <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
@@ -1709,89 +1768,9 @@ const generateOrderId = (orders) => {
     if (newsletterForm) {
         newsletterForm.addEventListener('submit', handleNewsletterSubmit);
     }
-    function showProductDetail(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
-
-    // Ẩn danh sách sản phẩm
-    document.getElementById("products").style.display = "none";
-
-    // Hiện trang chi tiết
-    const detailPage = document.getElementById("product-detail-page");
-    detailPage.style.display = "block";
-
-    // Gán dữ liệu vào giao diện
-    document.getElementById("detail-main-image").src = product.image;
-    document.getElementById("detail-name").textContent = product.name;
-    document.getElementById("detail-price").textContent = formatCurrency(product.price);
-    document.getElementById("detail-description-full").textContent = product.desc;
-    document.getElementById("detail-sku-value").textContent = product.id;
-
-    // Gọi hệ thống đánh giá
-    initReviewSection(productId);
-}
-function backToProductList() {
-    document.getElementById("product-detail-page").style.display = "none";
-    document.getElementById("products").style.display = "block";
-}
-
+    
 
 </script>
-  <script>
-// ====== MỞ MODAL ======
-function openModal() {
-    document.getElementById("auth-modal").classList.remove("hidden");
-}
-
-// ====== ĐÓNG MODAL ======
-function closeModal() {
-    document.getElementById("auth-modal").classList.add("hidden");
-}
-
-// ====== ĐÓNG MODAL KHI BẤM RA NGOÀI ======
-function closeModalOutside(event) {
-    if (event.target.classList.contains("modal-overlay")) {
-        closeModal();
-    }
-}
-
-
-// ====== CHECKOUT MODAL ======
-function openCheckoutModal() {
-    document.getElementById("checkout-modal").classList.remove("hidden");
-}
-
-function closeCheckoutModal() {
-    document.getElementById("checkout-modal").classList.add("hidden");
-}
-
-function closeCheckoutModalOutside(event) {
-    if (event.target.classList.contains("modal-overlay")) {
-        closeCheckoutModal();
-    }
-}
-
-
-// ====== SWITCH LOGIN / REGISTER TAB ======
-function showPanel(panel) {
-    const loginPanel = document.getElementById("login-panel");
-    const registerPanel = document.getElementById("register-panel");
-    const loginTab = document.getElementById("login-tab");
-    const registerTab = document.getElementById("register-tab");
-
-    if (panel === "login") {
-        loginPanel.classList.remove("hidden");
-        registerPanel.classList.add("hidden");
-        loginTab.classList.add("active");
-        registerTab.classList.remove("active");
-    } else {
-        loginPanel.classList.add("hidden");
-        registerPanel.classList.remove("hidden");
-        loginTab.classList.remove("active");
-        registerTab.classList.add("active");
-    }
-}
-</script>
-  
+    
 </body>
 </html>

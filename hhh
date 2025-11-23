@@ -1,0 +1,942 @@
+:root {
+    --primary-color: #A36B67; /* Gold/Copper tone */
+    --secondary-color: #F8F4E3; /* Light Cream/Ivory */
+    --accent-color: #4a4a4a; /* Dark Grey for text */
+    --light-text-color: #777;
+    --dark-bg: #222;
+    --white: #fff;
+    --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --transition-duration: 0.3s;
+    --header-height: 80px;
+}
+<div id="checkout-modal" class="modal-overlay hidden" onclick="closeCheckoutModalOutside(event)">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+        
+        <h2>Thanh Toán Đơn Hàng</h2>
+        
+        <div class="checkout-container">
+            <div class="shipping-info">
+                <h3>Thông Tin Giao Hàng</h3>
+                <form id="checkout-form">
+                    <input type="text" id="checkout-name" placeholder="Họ tên *" required>
+                    <input type="tel" id="checkout-phone" placeholder="Số điện thoại *" required>
+                    <input type="text" id="checkout-address" placeholder="Địa chỉ giao hàng *" required>
+                    
+                    <h3>Phương Thức Thanh Toán</h3>
+                    <div class="payment-options">
+                        <label><input type="radio" name="payment" value="cod" checked> Thanh toán khi nhận hàng (COD)</label>
+                        <label><input type="radio" name="payment" value="bank"> Chuyển khoản ngân hàng</label>
+                    </div>
+                    
+                    <button type="submit" class="place-order-btn">HOÀN TẤT ĐẶT HÀNG</button>
+                </form>
+            </div>
+            
+            <div class="order-summary">
+                <h3>Tóm Tắt Đơn Hàng</h3>
+                <div id="checkout-summary-list" class="summary-items-list">
+                    </div>
+                <div class="summary-totals">
+                    <p>Tạm tính: <span id="summary-subtotal">0 VNĐ</span></p>
+                    <p class="shipping">Phí vận chuyển: <span>Miễn phí</span></p>
+                    <hr>
+                    <p class="total">Tổng cộng: <span id="summary-total">0 VNĐ</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+ <!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DALAD Jewelry - Trang Sức Bạc Cao Cấp</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <a href="#home" class="logo">DALAD </a>
+            
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#home" class="active">Trang Chủ</a></li>
+                    
+                    <li class="nav-dropdown-item">
+                        <a href="#products">
+                            Cửa Hàng 
+                            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-mega">
+                            <div class="dropdown-column category-column">
+                                <ul class="category-list">
+                                    <li class="dropdown-title">Danh Mục Sản Phẩm</li>
+                                    <li><a href="#products" onclick="navFilter('nhan', event)">Nhẫn</a></li>
+                                    <li><a href="#products" onclick="navFilter('daychuyen', event)">Dây Chuyền</a></li>
+                                    <li><a href="#products" onclick="navFilter('vong', event)">Vòng Tay</a></li>
+                                    <li><a href="#products" onclick="navFilter('khuyen', event)">Khuyên Tai</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="#collections">Bộ Sưu Tập</a></li>
+                    <li><a href="#about">Về Chúng Tôi</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-icons">
+                <i class="fas fa-search" id="search-toggle"></i>
+                <a href="#account" class="icon-link"><i class="fas fa-user"></i></a>
+                <div class="cart-icon-container" id="cart-icon-container">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-bar" id="search-bar">
+            <input type="text" placeholder="Tìm kiếm sản phẩm...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+    </header>
+
+    <div class="cart-popup" id="cart-popup">
+        <div class="cart-header">
+            <h3>Giỏ Hàng Của Bạn</h3>
+            <span class="close-cart-btn">&times;</span>
+        </div>
+        <div class="cart-items-list" id="cart-items-list">
+            </div>
+        <div class="cart-footer">
+            <div class="cart-total-line">
+                <span>Tổng cộng:</span>
+                <span class="cart-total" id="cart-total">0 VNĐ</span>
+            </div>
+            <button class="checkout-btn">Tiến Hành Thanh Toán</button>
+            <button class="continue-shopping-btn">Tiếp Tục Mua Sắm</button>
+        </div>
+    </div>
+
+    <div id="checkout-modal" class="modal-backdrop">
+        <div class="modal-content checkout-content">
+            <div class="checkout-header">
+                <h2>Thanh Toán Đơn Hàng</h2>
+                <span class="close-btn" onclick="closeCheckoutModal()">&times;</span>
+            </div>
+            
+            <form id="checkout-form" class="checkout-form">
+                <div class="form-section customer-info">
+                    <h3>Thông Tin Khách Hàng</h3>
+                    <div class="form-group">
+                        <label for="checkout-name">Họ Tên *</label>
+                        <input type="text" id="checkout-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-phone">Số Điện Thoại *</label>
+                        <input type="tel" id="checkout-phone" required pattern="[0-9]{10,11}">
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-address">Địa Chỉ Giao Hàng *</label>
+                        <input type="text" id="checkout-address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-note">Ghi Chú Đơn Hàng (Tùy chọn)</label>
+                        <textarea id="checkout-note" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section order-summary">
+                    <h3>Tóm Tắt Đơn Hàng</h3>
+                    <div class="summary-items-list" id="summary-items-list">
+                        </div>
+
+                    <div class="summary-totals">
+                        <div class="summary-line">
+                            <span>Tạm tính:</span>
+                            <span id="summary-subtotal">0 VNĐ</span>
+                        </div>
+                        <div class="summary-line">
+                            <span>Phí vận chuyển:</span>
+                            <span class="shipping">Miễn Phí</span>
+                        </div>
+                        <hr>
+                        <div class="total-line">
+                            <span>Tổng thanh toán:</span>
+                            <span id="summary-total-amount">0 VNĐ</span>
+                        </div>
+                    </div>
+
+                    <h3>Phương Thức Thanh Toán</h3>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="cod" checked>
+                            Thanh toán khi nhận hàng (COD)
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="bank">
+                            Chuyển khoản Ngân hàng
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="place-order-btn">HOÀN TẤT ĐƠN HÀNG</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+    
+    <main>
+        <section id="home" class="hero-section">
+            <h1>Sắc Đẹp Vĩnh Cửu</h1>
+            <p>Trang sức bạc cao cấp, thiết kế tinh xảo dành cho bạn.</p>
+            <a href="#products" class="cta-button">Khám Phá Ngay</a>
+        </section>
+
+        <section id="products" class="products-section">
+            <h2>Sản Phẩm Nổi Bật</h2>
+            <div class="product-tabs" id="product-tabs">
+                </div>
+            <div class="product-list" id="product-list">
+                </div>
+        </section>
+        
+        <section id="collections" class="collections-section">
+            <h2>Bộ Sưu Tập Mới</h2>
+            <div class="collection-grid">
+                <div class="collection-item">
+                    <img src="vong4.jpg" alt="Bộ sưu tập Sắc Màu Biển Cả">
+                    <h4>Sắc Màu Biển Cả</h4>
+                    <p>Màu xanh tươi mát, thiết kế lấy cảm hứng từ đại dương.</p>
+                </div>
+                <div class="collection-item">
+                    <img src="vong5.jpg" alt="Bộ sưu tập Kim Cương Nhân Tạo">
+                    <h4>Kim Cương Nhân Tạo</h4>
+                    <p>Thiết kế lấp lánh, sang trọng với đá CZ cao cấp.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <h2>Về DALAD Jewelry</h2>
+            <p>DALAD cam kết mang đến những sản phẩm bạc 925 cao cấp, thiết kế tinh tế và chất lượng vượt trội. Mỗi món trang sức là một câu chuyện về vẻ đẹp và phong cách cá nhân.</p>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>DALAD</h4>
+                <p>Trang sức bạc tinh tế, nâng tầm phong cách.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Liên hệ</h4>
+                <p>Email: support@dalad.vn</p>
+                <p>Hotline: 1900 6868</p>
+            </div>
+            <div class="footer-column">
+                <h4>Chính sách</h4>
+                <ul>
+                    <li><a href="#">Bảo mật thông tin</a></li>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Theo dõi chúng tôi</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 DALAD Jewelry. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+<script>
+    // Định nghĩa các biến và dữ liệu giả định
+    const products = [
+        { id: 'p1', name: 'Nhẫn La Mã Khắc Rỗng', category: 'nhan', price: 12500000, stock: 25, images: ['1.jpg'], desc: 'Cá tính, khắc rỗng số La Mã, ý nghĩa thời gian.', tag: 'Hot', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p5', name: 'Nhẫn Eternity Đính Đá CZ', category: 'nhan', price: 4500000, stock: 40, images: ['2.jpg'], desc: 'Thanh mảnh, vĩnh cửu, đeo xếp lớp.', tag: '', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p8', name: 'Nhẫn Nơ Xinh Đá Rơi', category: 'nhan', price: 25000000, stock: 10, images: ['3.jpg'], desc: 'Nơ độc đáo, chuyển động, rất nữ tính.', tag: 'VIP', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        { id: 'p11', name: 'Nhẫn Nơ Đá Mini Dịu Dàng', category: 'nhan', price: 9900000, stock: 30, images: ['4.jpg'], desc: 'Nhỏ gọn, duyên dáng, phong cách trẻ trung.', tag: 'Sale', sizes: ['S6', 'S7', 'S8', 'S9'] },
+        
+        { id: 'p12', name: 'Dây Chuyền Trái Tim Đá', category: 'daychuyen', price: 7500000, stock: 50, images: ['5.jpg'], desc: 'Mặt trái tim lớn đính đá, sang trọng và thu hút.', tag: 'Hot', sizes: ['40cm', '45cm'] },
+        { id: 'p13', name: 'Dây Chuyền Chữ Y Minimal', category: 'daychuyen', price: 3200000, stock: 80, images: ['6.jpg'], desc: 'Thiết kế chữ Y tối giản, hiện đại.', tag: '', sizes: ['40cm', '45cm'] },
+        
+        { id: 'p14', name: 'Vòng Tay Xích Lớn Đá Khóa', category: 'vong', price: 15000000, stock: 15, images: ['7.jpg'], desc: 'Vòng tay xích lớn bản to, khóa gài đính đá.', tag: 'VIP', sizes: ['S', 'M', 'L'] },
+        { id: 'p15', name: 'Vòng Tay Đơn Giản Charm', category: 'vong', price: 4900000, stock: 60, images: ['8.jpg'], desc: 'Vòng tay mảnh có charm nhỏ, dễ đeo hằng ngày.', tag: 'Sale', sizes: ['Free Size'] },
+        
+        { id: 'p16', name: 'Khuyên Tai Tròn Đính Đá', category: 'khuyen', price: 5500000, stock: 90, images: ['9.jpg'], desc: 'Khuyên tai tròn nhỏ đính đá, lấp lánh.', tag: 'Hot', sizes: ['N/A'] },
+        { id: 'p17', name: 'Khuyên Tai Dài Ngọc Trai', category: 'khuyen', price: 18000000, stock: 5, images: ['10.jpg'], desc: 'Thiết kế dài, quý phái với ngọc trai nước ngọt.', tag: 'VIP', sizes: ['N/A'] }
+    ];
+    
+    const categories = {
+        'all': 'Tất Cả',
+        'nhan': 'Nhẫn',
+        'daychuyen': 'Dây Chuyền',
+        'vong': 'Vòng Tay',
+        'khuyen': 'Khuyên Tai'
+    };
+
+    let cart = JSON.parse(localStorage.getItem('daladCart')) || []; // Dữ liệu giỏ hàng
+    const cartPopup = document.getElementById('cart-popup');
+    const checkoutModal = document.getElementById('checkout-modal');
+
+    // 1. CÁC HÀM TIỆN ÍCH
+
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString('vi-VN') + ' VNĐ';
+    };
+
+    const saveCart = () => {
+        localStorage.setItem('daladCart', JSON.stringify(cart));
+    };
+
+    const calculateTotal = () => {
+        return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    };
+
+    const showToast = (message, type = 'toast-info') => {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        
+        container.appendChild(toast);
+
+        // Tự động xóa sau 3 giây
+        setTimeout(() => {
+            toast.classList.add('hide');
+            toast.addEventListener('transitionend', () => {
+                toast.remove();
+            });
+        }, 3000);
+    };
+
+    // 2. CHỨC NĂNG GIỎ HÀNG (CART)
+
+    const updateCartDisplay = () => {
+        const cartCount = document.getElementById('cart-count');
+        const cartTotal = document.getElementById('cart-total');
+        const cartItemsList = document.getElementById('cart-items-list');
+
+        const totalItems = cart.reduce((count, item) => count + item.quantity, 0);
+        const totalPrice = calculateTotal();
+
+        if (cartCount) cartCount.textContent = totalItems;
+        if (cartTotal) cartTotal.textContent = formatCurrency(totalPrice);
+
+        if (cartItemsList) {
+            cartItemsList.innerHTML = '';
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = '<p class="empty-cart-message">Giỏ hàng của bạn đang trống.</p>';
+            } else {
+                cart.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'cart-item';
+                    div.innerHTML = `
+                        <img src="images/${item.images[0]}" alt="${item.name}">
+                        <div class="item-details">
+                            <p class="item-name">${item.name}</p>
+                            <p class="item-size">Size: ${item.size}</p>
+                            <div class="quantity-control">
+                                <button onclick="changeQuantity('${item.id}', '${item.size}', -1)">-</button>
+                                <span>${item.quantity}</span>
+                                <button onclick="changeQuantity('${item.id}', '${item.size}', 1)">+</button>
+                            </div>
+                        </div>
+                        <div class="item-price">
+                            ${formatCurrency(item.price * item.quantity)}
+                            <button class="remove-item-btn" onclick="removeFromCart('${item.id}', '${item.size}')">&times;</button>
+                        </div>
+                    `;
+                    cartItemsList.appendChild(div);
+                });
+            }
+        }
+        saveCart();
+    };
+
+    const addToCart = (productId, selectedSize) => {
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        const existingItem = cart.find(item => item.id === productId && item.size === selectedSize);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                images: product.images,
+                size: selectedSize,
+                quantity: 1
+            });
+        }
+        showToast(`${product.name} (Size ${selectedSize}) đã thêm vào giỏ hàng.`, 'toast-success');
+        updateCartDisplay();
+    };
+
+    const changeQuantity = (productId, size, delta) => {
+        const index = cart.findIndex(item => item.id === productId && item.size === size);
+        if (index !== -1) {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartDisplay();
+        }
+    };
+
+    const removeFromCart = (productId, size) => {
+        const initialLength = cart.length;
+        cart = cart.filter(item => !(item.id === productId && item.size === size));
+        if (cart.length < initialLength) {
+            showToast('Đã xóa sản phẩm khỏi giỏ hàng.', 'toast-info');
+        }
+        updateCartDisplay();
+    };
+
+
+    // 3. CHỨC NĂNG HIỂN THỊ SẢN PHẨM & TABS
+
+    const renderProducts = (productList) => {
+        const productListElement = document.getElementById('product-list');
+        if (!productListElement) return;
+
+        productListElement.innerHTML = ''; // Xóa sản phẩm cũ
+
+        productList.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            
+            // Lấy size đầu tiên làm mặc định
+            const defaultSize = product.sizes && product.sizes.length > 0 ? product.sizes[0] : 'N/A';
+
+            productCard.innerHTML = `
+                <div class="product-image">
+                    <img src="images/${product.images[0]}" alt="${product.name}">
+                    ${product.tag ? `<span class="product-tag">${product.tag}</span>` : ''}
+                </div>
+                <div class="product-info">
+                    <h4 class="product-name">${product.name}</h4>
+                    <p class="product-price">${formatCurrency(product.price)}</p>
+                    <div class="product-action">
+                        <select class="product-size-select" id="size-${product.id}">
+                            ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
+                        </select>
+                        <button class="add-to-cart-btn" onclick="handleAddToCartClick('${product.id}')">
+                            <i class="fas fa-shopping-cart"></i> Thêm
+                        </button>
+                    </div>
+                </div>
+            `;
+            productListElement.appendChild(productCard);
+        });
+    };
+    
+    // Xử lý click Thêm vào giỏ hàng
+    const handleAddToCartClick = (productId) => {
+        const sizeSelect = document.getElementById(`size-${productId}`);
+        const selectedSize = sizeSelect ? sizeSelect.value : 'N/A';
+        addToCart(productId, selectedSize);
+    };
+
+
+    const renderTabs = () => {
+        const tabsContainer = document.getElementById('product-tabs');
+        if (!tabsContainer) return;
+
+        tabsContainer.innerHTML = '';
+
+        Object.entries(categories).forEach(([key, name]) => {
+            const button = document.createElement('button');
+            button.className = `tab-button ${key === 'all' ? 'active' : ''}`;
+            button.textContent = name;
+            button.onclick = () => filterProducts(key, button);
+            tabsContainer.appendChild(button);
+        });
+    };
+
+    const filterProducts = (categoryKey, button) => {
+        // Xóa active class khỏi tất cả các nút
+        document.querySelectorAll('.product-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
+        
+        // Thêm active class vào nút được click
+        if (button) button.classList.add('active');
+
+        let filtered = products;
+        if (categoryKey !== 'all') {
+            filtered = products.filter(p => p.category === categoryKey);
+        }
+        renderProducts(filtered);
+    };
+    
+    const navFilter = (categoryKey, event) => {
+        event.preventDefault();
+        // Cuộn tới phần sản phẩm
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+        
+        // Lấy nút tab tương ứng và kích hoạt filter
+        const tabsContainer = document.getElementById('product-tabs');
+        if (tabsContainer) {
+            const button = tabsContainer.querySelector(`.tab-button[onclick*="'${categoryKey}'"]`);
+            filterProducts(categoryKey, button);
+        }
+    }
+
+
+    // 4. CHỨC NĂNG MODAL THANH TOÁN (CHECKOUT)
+
+    const openCheckoutModal = () => {
+        if (cart.length === 0) {
+            showToast('Giỏ hàng trống! Vui lòng thêm sản phẩm.', 'toast-warning');
+            return;
+        }
+
+        const summaryList = document.getElementById('summary-items-list');
+        const summarySubtotal = document.getElementById('summary-subtotal');
+        const summaryTotalAmount = document.getElementById('summary-total-amount');
+
+        // Cập nhật tóm tắt đơn hàng
+        summaryList.innerHTML = '';
+        cart.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'summary-item';
+            div.innerHTML = `
+                <span class="summary-item-name">${item.name} (x${item.quantity}, Size ${item.size})</span>
+                <span class="summary-item-price">${formatCurrency(item.price * item.quantity)}</span>
+            `;
+            summaryList.appendChild(div);
+        });
+
+        const total = calculateTotal();
+        const subtotal = total; // Giả định subtotal bằng total nếu không có thuế/chiết khấu
+
+        summarySubtotal.textContent = formatCurrency(subtotal);
+        summaryTotalAmount.textContent = formatCurrency(total);
+        
+        if (checkoutModal) checkoutModal.style.display = 'flex';
+        if (cartPopup) cartPopup.classList.remove('visible'); // Đóng giỏ hàng popup
+    };
+
+    const closeCheckoutModal = () => {
+        if (checkoutModal) checkoutModal.style.display = 'none';
+    };
+
+    const closeCheckoutModalOutside = (event) => {
+        if (event.target === checkoutModal) {
+            closeCheckoutModal();
+        }
+    };
+
+    // 5. CHỨC NĂNG ADMIN API (MỚI)
+
+    const ADMIN_API_ENDPOINT = './api_admin.php'; // **ĐƯỜNG DẪN ĐẾN API BACKEND**
+
+    const submitOrder = async (event) => {
+        event.preventDefault(); 
+        
+        // --- 1. Thu thập dữ liệu khách hàng ---
+        const form = event.target;
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            window.showToast('Vui lòng điền đầy đủ thông tin bắt buộc.', 'toast-warning');
+            return;
+        }
+        
+        if (!window.cart || window.cart.length === 0) {
+            window.showToast('Giỏ hàng trống! Không thể đặt hàng.', 'toast-warning');
+            return;
+        }
+        
+        // Lấy dữ liệu từ form Checkout (Đã cập nhật ID đúng theo HTML)
+        const customerName = document.getElementById('checkout-name').value;
+        const phone = document.getElementById('checkout-phone').value;
+        const address = document.getElementById('checkout-address').value;
+        const notes = document.getElementById('checkout-note').value;
+        const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || 'cod'; 
+
+        const totalAmount = window.calculateTotal ? window.calculateTotal() : 0;
+        
+        const cartItemsData = window.cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            size: item.size || 'N/A', 
+            quantity: item.quantity,
+            price: item.price,
+        }));
+        
+        const orderData = {
+            customer: {
+                name: customerName,
+                phone: phone,
+                address: address,
+            },
+            items: cartItemsData,
+            notes: notes,
+            payment: {
+                method: paymentMethod,
+            },
+            total: totalAmount,
+            status_client: 'Đã đặt hàng', 
+            timestamp: new Date().toISOString()
+        };
+
+        // --- 2. GỬI ĐƠN HÀNG ĐẾN API ADMIN ---
+        try {
+            console.log('Đang gửi đơn hàng tới API:', ADMIN_API_ENDPOINT, orderData);
+            
+            const response = await fetch(ADMIN_API_ENDPOINT, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                
+                // Xử lý thành công: Xóa giỏ hàng và thông báo
+                window.cart.length = 0; 
+                window.updateCartDisplay(); 
+                window.closeCheckoutModal();
+                window.showToast(`Đặt hàng thành công! ĐH: ${result.order_id}`, 'toast-success');
+                
+            } else {
+                // Lỗi từ phía Server (ví dụ: lỗi ghi file 500)
+                const errorBody = await response.text();
+                console.error('LỖI SERVER (API ADMIN):', response.status, errorBody);
+                window.showToast(`Lỗi đặt hàng (HTTP ${response.status}). Vui lòng kiểm tra Console và File Permissions.`, 'toast-error');
+            }
+
+        } catch (error) {
+            // Lỗi kết nối (Server PHP chưa chạy, lỗi CORS,...)
+            console.error('LỖI KẾT NỐI MẠNG HOẶC SERVER:', error);
+            window.showToast('Không thể kết nối với máy chủ. Vui lòng kiểm tra Server PHP và đường dẫn API.', 'toast-error');
+        }
+    };
+
+
+    // 6. CÁC HÀM PHỤ TRỢ KHÁC (TỪ CODE GỐC)
+    
+    // Toggle Password Visibility Logic
+    const togglePasswordVisibility = (inputId, iconId) => {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (!input || !icon) return;
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    };
+
+    // Search Bar Logic
+    const searchBar = document.getElementById('search-bar');
+    const toggleSearchBar = () => {
+        if (!searchBar) return;
+        searchBar.classList.toggle('search-bar-visible');
+        if (searchBar.classList.contains('search-bar-visible')) {
+            searchBar.querySelector('input')?.focus();
+        }
+    };
+
+    // Gán sự kiện cho nút tìm kiếm
+    const searchToggle = document.getElementById('search-toggle');
+    if (searchToggle) {
+        searchToggle.onclick = toggleSearchBar;
+    }
+
+    // Gán sự kiện cho giỏ hàng
+    const cartIconContainer = document.getElementById('cart-icon-container');
+    if (cartIconContainer) {
+        cartIconContainer.onclick = () => cartPopup.classList.toggle('visible');
+    }
+
+    const closeCartBtn = document.querySelector('#cart-popup .close-cart-btn');
+    if (closeCartBtn) {
+        closeCartBtn.onclick = () => cartPopup.classList.remove('visible');
+    }
+    const continueShoppingBtn = document.querySelector('#cart-popup .continue-shopping-btn');
+    if (continueShoppingBtn) {
+        continueShoppingBtn.onclick = () => cartPopup.classList.remove('visible');
+    }
+
+    // 7. KHỞI CHẠY (INITIALIZATION)
+    document.addEventListener('DOMContentLoaded', () => {
+        if (products.length > 0) {
+            renderProducts(products.filter(p => p.category === 'nhan')); // Mặc định hiển thị Nhẫn
+            renderTabs();
+        }
+        updateCartDisplay();
+        
+        // Gán sự kiện cho nút "Tiến Hành Thanh Toán" trong Cart Popup
+        const checkoutBtn = document.querySelector('#cart-popup .checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.onclick = openCheckoutModal; 
+        }
+        
+        // Gán sự kiện cho form thanh toán
+        const checkoutForm = document.getElementById('checkout-form');
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', submitOrder); // Dùng submitOrder đã sửa
+        }
+    });
+    
+    // Gán sự kiện đóng modal thanh toán khi click ra ngoài
+    window.addEventListener('click', closeCheckoutModalOutside);
+
+</script>
+    
+</body>
+</html>
+
+
+
+
+
+
+// Biến lưu trữ đơn hàng giả lập (Đặt ở đầu khối script)
+let placedOrders = [];
+
+// HÀM HỖ TRỢ: TÍNH TỔNG TIỀN GIỎ HÀNG (Cần thiết cho submitOrder)
+const calculateCartTotal = () => {
+    let subTotal = 0;
+    cart.forEach(item => {
+        subTotal += item.price * item.quantity;
+    });
+    // Giả sử phí vận chuyển là 0
+    const shippingFee = 0; 
+    const finalTotal = subTotal + shippingFee;
+    return { subTotal, shippingFee, finalTotal };
+};
+
+// =================================================================
+// 4. LOGIC THANH TOÁN (ĐÃ SỬA ĐỔI)
+// =================================================================
+
+const renderCheckoutSummary = () => {
+    const checkoutSummaryList = document.getElementById('checkout-summary-list');
+    const summarySubtotal = document.getElementById('summary-subtotal');
+    const summaryTotal = document.getElementById('summary-total');
+
+    if (!checkoutSummaryList || !summarySubtotal || !summaryTotal) return;
+    checkoutSummaryList.innerHTML = '';
+    
+    const totals = calculateCartTotal(); // Lấy tổng tiền bằng hàm mới
+
+    cart.forEach(item => {
+        const itemPrice = item.price * item.quantity;
+        const sizeInfo = item.size ? `(${item.size})` : '';
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'summary-item';
+        itemDiv.innerHTML = `
+            <span class="summary-item-name">${item.name} ${sizeInfo} x ${item.quantity}</span>
+            <span>${formatCurrency(itemPrice)}</span>
+        `;
+        checkoutSummaryList.appendChild(itemDiv);
+    });
+
+    summarySubtotal.textContent = formatCurrency(totals.subTotal);
+    summaryTotal.textContent = formatCurrency(totals.finalTotal);
+};
+
+// Hàm đóng Modal Thanh toán
+const closeCheckoutModal = () => { 
+    const checkoutModal = document.getElementById('checkout-modal');
+    if (checkoutModal) checkoutModal.classList.add('hidden'); 
+}; 
+
+/* Mở Modal Thanh toán */ 
+const openCheckoutModal = () => { 
+    const checkoutModal = document.getElementById('checkout-modal');
+    const cartPopup = document.getElementById('cart-popup');
+    const showToast = window.showToast || alert; // Dùng showToast nếu có, nếu không dùng alert
+
+    if (!checkoutModal) return console.error("Lỗi: Không tìm thấy phần tử HTML 'checkout-modal'."); 
+    if (cart.length === 0) { 
+        showToast('Giỏ hàng trống. Vui lòng thêm sản phẩm.', 'error'); 
+        return; 
+    } 
+    // 1. Đóng giỏ hàng nhỏ 
+    if(cartPopup) cartPopup.classList.remove('cart-popup-visible');
+    // 2. Render tóm tắt đơn hàng 
+    renderCheckoutSummary(); 
+    // 3. Hiển thị modal 
+    checkoutModal.classList.remove('hidden'); 
+}; 
+
+
+// HÀM XỬ LÝ VIỆC GỬI FORM THANH TOÁN (Hàm MỚI thay thế)
+const submitOrder = (event) => {
+    event.preventDefault(); // Ngăn chặn form submit mặc định
+    
+    // 1. Lấy thông tin từ form
+    const name = document.getElementById('checkout-name').value.trim();
+    const phone = document.getElementById('checkout-phone').value.trim();
+    const email = document.getElementById('checkout-email').value.trim();
+    const address = document.getElementById('checkout-address').value.trim();
+    // Lấy radio button với name="payment"
+    const paymentMethodEl = document.querySelector('input[name="payment"]:checked');
+    const paymentMethod = paymentMethodEl ? paymentMethodEl.value : null;
+    const note = document.getElementById('checkout-note')?.value.trim() || '';
+    
+    const showToast = window.showToast || alert; 
+    
+    // 2. Kiểm tra tính hợp lệ cơ bản
+    if (!name || !phone || !email || !address || !paymentMethod) {
+        showToast("Vui lòng điền đầy đủ thông tin bắt buộc.", 'error'); 
+        return;
+    }
+    
+    if (cart.length === 0) {
+        showToast("Giỏ hàng của bạn đang trống!", 'error');
+        return;
+    }
+
+    // 3. Tạo đối tượng Đơn hàng
+    const orderId = 'DH' + Date.now();
+    const orderTotal = calculateCartTotal(); // Dùng hàm mới
+    
+    const newOrder = {
+        id: orderId,
+        customerName: name,
+        customerPhone: phone,
+        customerEmail: email,
+        shippingAddress: address,
+        paymentMethod: paymentMethod,
+        orderDate: new Date().toLocaleDateString('vi-VN'),
+        total: orderTotal.finalTotal,
+        items: [...cart], 
+        status: 'Chờ duyệt',
+        note: note
+    };
+    
+    // 4. Lưu đơn hàng giả lập & Xóa giỏ hàng
+    placedOrders.push(newOrder); 
+    cart = []; 
+    localStorage.removeItem('cart'); // Xóa giỏ hàng khỏi LocalStorage
+    updateCartDisplay(); // Cập nhật lại giao diện giỏ hàng
+
+    // 5. HIỂN THỊ THÔNG BÁO THÀNH CÔNG (YÊU CẦU CỦA BẠN)
+    
+    // Đóng Modal Thanh toán
+    document.getElementById('checkout-modal').classList.add('hidden');
+    
+    // Hiển thị thông báo thành công
+    alert(
+        `🎉 Đặt hàng thành công! 🎉\n\n` +
+        `Mã đơn hàng: ${orderId}\n` +
+        `Tổng tiền: ${formatCurrency(orderTotal.finalTotal)}\n` +
+        `DALAD sẽ liên hệ với bạn qua SĐT ${phone} để xác nhận đơn hàng sớm nhất.`
+    );
+    
+    // Reset form
+    document.getElementById('checkout-form').reset();
+};
+
+
+const stats = [
+        { title: 'Tổng Doanh Thu Đã Giao', value: `${totalRev.toLocaleString('vi-VN')} VNĐ` },
+        { title: 'Tổng Đơn Hàng', value: orders.length },
+        { title: 'Số Sản Phẩm', value: products.length },
+        { title: 'Sản Phẩm Bán Chạy', value: `${bestSeller.name} (${bestSeller.qty} SP)` },
+    ];
+    
+
+
+
+    <div class="hero-left">
+                <div class="image-wrapper" style="background-image: url('mau1.png');"></div>
+            </div>
+
+
+
+             <div class="image-small-wrapper" style="background-image: url('mau3.png');"></div>
+            </div>
+
+
+
+
+            .hero-left,
+.hero-right {
+    display: none !important;
+}
+
+/* HERO FULL WIDTH */
+.hero-section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    height: 600px; /* chiều cao banner */
+    position: relative;
+    overflow: hidden;
+}
+
+/* HERO CENTER THÀNH BANNER */
+.hero-center {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    padding-top: 120px;  /* đẩy chữ xuống cho đẹp */
+    text-align: center;
+    z-index: 5;
+}
+.hero-center h2,
+.hero-center h1 {
+    color: rgb(255, 255, 255);
+    text-align: center;
+    z-index: 5;
+}
+/* ẢNH NỀN GIÁNG SINH FULL 2 BÊN */
+.hero-center::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("nam.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.70;
+    z-index: -1;
+}
+
+/* ẢNH MẪU 3 TO NHƯ PHIÊN BẢN ĐẦU */
+.image-small-wrapper {
+    width: 380px;       /* to hơn – giống bản đầu tiên bạn có */
+    height: 240px;
+    margin: 40px auto 0 auto;
+
+    background-size: cover;
+    background-position: center;
+
+    border: 6px solid white;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+
+    position: relative;
+    z-index: 10;   /* đảm bảo không bị che */
+}
