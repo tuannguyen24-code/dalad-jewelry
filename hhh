@@ -876,7 +876,12 @@ const stats = [
              <div class="image-small-wrapper" style="background-image: url('mau3.png');"></div>
             </div>
 
-
+<p>Khuyến Mãi Lớn</p>
+                <h1 class="sale-title">FLASH SALE! GIẢM 30%</h1>
+                <p>đối với đơn hàng trên 2 triệu.</p>
+                <a href="#products" class="primary-btn">Xem Ngay Cửa Hàng <i class="fa-solid fa-arrow-right"></i></a>
+                <div class="image-small-wrapper" style="background-image: url('mau3.png');"></div>
+            </div>
 
 
             .hero-left,
